@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>arithmetic</title>
+</head>
+<body>
+
+<div style="position:relative;border:groove;background-color: #ddd;margin:20px;width:480px;height:360px;"><div style="margin:10px 0;position:relative;width:100%;height:310px;background-color: #100;" id="div" onmousedown="mouseDown(event)" onmouseup="mouseUp(event)" onmousemove="mouseMove(event)">
+<canvas id="cvs" style="width:100%;height:100%;position:relative;" width="860" height="650"></canvas></div>
+<input style="width:25%;height:20px;margin: 0 2%;border:groove;" type="text" title="a piece of js code" value="1.0/x*x+1.0/y*y==10" id="arithmetic"><input style="width:100px;height:30px;margin: 0 1%;" type="button" value="submit" onclick="submit()" id="submit"></div>
+
+<script type="text/javascript">
+"use strict";
+
+
+var $ = function(v) { return document.getElementById(v) };
+var div = $("div");
+var cvs = $("cvs");
+var w = div.clientWidth;
+var h = div.clientHeight;
+cvs.width = w;
+cvs.height = h;
+
+var ctx = cvs.getContext("2d");
+
+var L = -100.0, T = -100.0, R = 100.0, B = 100.0;
+
+function submit() {
+	var btn = $("submit");
+	btn.value="wait...";
+
+	drawArithmeticCurve();
+	btn.value="OK";
+}
+
+function drawArithmeticCurve() {
+	ctx.fillStyle="#fff";
+	ctx.clearRect(0, 0, w, h);
+	ctx.beginPath();
+	ctx.strokeStyle = "#0f0";
+
+	var arithmeticRule = $("arithmetic").value;
+	var stepX = (R - L) / w;
+	var stepY = (B - T) / h;
+
+	var r = Math.PI * 2.0;
+
+	var data = ctx.getImageData(0, 0, w, h);
+	var d = data.data;
+
+	var codeString = "" + 
+	"for(var i = 0; i != h; ++i) {\n" + 
+	"	for(var j = 0; j != w; ++j) {\n" +
+	"		var x = L + j * stepX, y = T + i * stepY;\n" + 
+	"		var result = (" + arithmeticRule + ")\n" +
+	"		if(result) {\n" +
+	"			ctx.arc(j, i, 3, 0, r);\n" +
+	"		}\n"+
+	"	}\n"+
+	"}\n";
+
+	eval(codeString);
+
+	ctx.fillText("Author URL: http://wysaid.org", 20, 20);
+	ctx.stroke();
+	ctx.closePath();
+}
+
+function mouseDown(event) {
+
+}
+
+function mouseUp(event) {
+
+}
+
+function mouseMove(event) {
+
+}
+
+</script>
+
+</body>
+</html>

@@ -96,10 +96,7 @@ function drawEquation(imageData) {
 	for(var x1 = L; x1 < R; x1 += gridStepX) {
 		for(var y1 = T; y1 < B; y1 += gridStepY) {
 
-			var weight = getWeight(x1 - stepX, y1 - stepY,
-									x1 + gridStepX + stepX, y1 + gridStepY + stepY,
-									x1 + gridStepX / 2.0, y1 + gridStepY / 2.0,
-									10, tolerance);
+			var weight = getWeight(x1 - stepX, y1 - stepY, x1 + gridStepX + stepX, y1 + gridStepY + stepY, x1 + gridStepX / 2.0, y1 + gridStepY / 2.0, 10, tolerance);
 
 			if(weight > 0) {
 				for(var i = 0; i < gradient; ++i) {
@@ -107,10 +104,7 @@ function drawEquation(imageData) {
 						var x2 = x1 + i * stepX;
 						var y2 = y1 + j * stepY;
 
-						weight = getWeight(x2, y2,
-											x2 + stepX, y2 + stepY,
-											x2 + stepX / 2.0, y2 + stepY / 2.0,
-											5, tolerance * 0.1);
+						weight = getWeight(x2, y2, x2 + stepX, y2 + stepY, x2 + stepX / 2.0, y2 + stepY / 2.0, 5, tolerance * 0.1);
 
 						if(weight > 0) {
 							var px = parseInt((x2 + stepX * 0.5 - L) / stepX);

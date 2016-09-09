@@ -149,13 +149,13 @@ function getWeight(a, b, c, d, x0, y0, count, toler) {
 
         delta = Math.abs(c - a) * dFact;
         
-        f1 = f1Of(x0, y0, delta);
+        f1 = getWeightX(x0, y0, delta);
         
         if (isNaN(f1))
             break;
 
         delta = Math.abs(d - b) * dFact;
-        f2 = f2Of(x0, y0, delta);
+        f2 = getWeightY(x0, y0, delta);
         
         if (isNaN(f2))
             break;
@@ -175,10 +175,10 @@ function getWeight(a, b, c, d, x0, y0, count, toler) {
     return 0.0;
 }
 
-function f1Of(xPos, yPos, delta) {
+function getWeightX(xPos, yPos, delta) {
     return (calcEquation(xPos + delta, yPos) - calcEquation(xPos - delta, yPos)) / (2 * delta);
 }
-function f2Of(xPos, yPos, delta) {
+function getWeightY(xPos, yPos, delta) {
     return (calcEquation(xPos, yPos + delta) - calcEquation(xPos, yPos - delta)) / (2 * delta);
 }
 
@@ -195,6 +195,8 @@ function mouseMove(event) {
 }
 
 </script>
+
+<p>Source Code: <a href="https://github.com/wysaid/simple-arithmetic" target="_blank">https://github.com/wysaid/simple-arithmetic</a></p>
 
 </body>
 </html>

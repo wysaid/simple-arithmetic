@@ -4,17 +4,27 @@
 <meta charset="utf-8">
 <title>arithmetic</title>
 </head>
-<body>
+<script type="text/javascript">
+
+var $ = function(v) { return document.getElementById(v) };
+var builtinEquation = [
+"x*x+y*y=10",
+"Math.pow(Math.sin(x), 2) - y*y=0",
+"y = Math.pow(Math.sin(x), 2)",
+"x*x+y*y=10",
+"y=0.5*x*x-2*x*y+1",
+"0.5*Math.pow(x*x+y*y-1, 3) = x*x*y*y*y"
+];
+</script>
+<body onload="$('arithmetic').value=builtinEquation[parseInt(Math.random()*builtinEquation.length) % builtinEquation.length];submit()">
 
 <div style="position:relative;border:groove;background-color: #ddd;margin:20px;width:480px;height:360px;"><div style="margin:10px 0;position:relative;width:100%;height:310px;background-color: #ddd;" id="div" onmousedown="mouseDown(event)" onmouseup="mouseUp(event)" onmousemove="mouseMove(event)">
 <canvas id="cvs" style="width:100%;height:100%;position:relative;" width="860" height="650"></canvas></div>
-<input style="width:25%;height:20px;margin: 0 2%;border:groove;" type="text" title="a piece of js code" value="x*x+y*y=10" id="arithmetic"><input style="width:100px;height:30px;margin: 0 1%;" type="button" value="submit" onclick="submit()" id="submit"></div>
+<input style="width:25%;height:20px;margin: 0 2%;border:groove;" type="text" title="a piece of js code" id="arithmetic"><input style="width:100px;height:30px;margin: 0 1%;" type="button" value="submit" onclick="submit()" id="submit"></div>
 
 <script type="text/javascript">
 "use strict";
 
-
-var $ = function(v) { return document.getElementById(v) };
 var div = $("div");
 var cvs = $("cvs");
 var w = div.clientWidth;
@@ -108,7 +118,7 @@ function drawEquation(imageData) {
 
 							if(px >= 0 && px < w && py >= 0 && py < h) {
 								var index = py * (w * 4) + px * 4;
-								imageData[index] = 255;
+								imageData[index] = 0;
 								imageData[index + 1] = 0;
 								imageData[index + 2] = 0;
 								imageData[index + 3] = 255;

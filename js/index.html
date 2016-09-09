@@ -20,7 +20,7 @@ var builtinEquation = [
 
 <div style="position:relative;border:groove;background-color: #ddd;margin:20px;width:480px;height:360px;"><div style="margin:10px 0;position:relative;width:100%;height:310px;background-color: #ddd;" id="div" onmousedown="mouseDown(event)" onmouseup="mouseUp(event)" onmousemove="mouseMove(event)">
 <canvas id="cvs" style="width:100%;height:100%;position:relative;" width="860" height="650"></canvas></div>
-<input style="width:25%;height:20px;margin: 0 2%;border:groove;" type="text" title="a piece of js code" id="arithmetic"><input style="width:100px;height:30px;margin: 0 1%;" type="button" value="submit" onclick="submit()" id="submit"></div>
+<input style="width:60%;height:20px;margin: 0 2%;border:groove;" type="text" title="a piece of js code" id="arithmetic"><input style="width:100px;height:30px;margin: 0 1%;" type="button" value="submit" onclick="submit()" id="submit"></div>
 
 <script type="text/javascript">
 "use strict";
@@ -34,7 +34,7 @@ cvs.height = h;
 
 var ctx = cvs.getContext("2d");
 
-var L = -9.6, T = -6.2, R = 9.6, B = 6.2;
+var L = -7.68, T = -4.96, R = 7.68, B = 4.96;
 
 function submit() {
 	var btn = $("submit");
@@ -120,7 +120,7 @@ function drawEquation(imageData) {
 								var index = py * (w * 4) + px * 4;
 								imageData[index] = 0;
 								imageData[index + 1] = 0;
-								imageData[index + 2] = 0;
+								imageData[index + 2] = 150;
 								imageData[index + 3] = 255;
 							}
 

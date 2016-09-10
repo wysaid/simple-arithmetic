@@ -8,13 +8,14 @@
 
 #include "arithmetic.h"
 #include <cmath>
+#include <vector>
 
 #define LEFT_VAR m_childNode.front()->value()
 #define RIGHT_VAR m_childNode.back()->value()
 #define HELPER_2_ARG(op) \
 return LEFT_VAR op RIGHT_VAR \
 
-bool ArithmeticNodeOperatorBasic::check()
+bool ArithmeticNodeOperatorImp::check()
 {
 	switch (m_op)
 	{
@@ -29,7 +30,7 @@ bool ArithmeticNodeOperatorBasic::check()
 	}
 }
 
-double ArithmeticNodeOperatorBasic::value()
+double ArithmeticNodeOperatorImp::value()
 {
 	if (!check())
 		return 0.0;
@@ -59,24 +60,49 @@ double ArithmeticNodeOperatorBasic::value()
 	}
 }
 
-ArithmeticNode* parseNode(const std::string& equation)
+ArithmeticNode* parseNode(std::string& equation, std::vector<ArithmeticNode*>& tmpNodes)
 {
 	using namespace std;
 
+	auto brIndex = equation.find_last_of('(');
+	if (brIndex != string::npos)
+	{
+		auto endIndex = equation.find(')', brIndex);
+		if (string::npos == endIndex)
+			return nullptr; //Invalid Equation
 
+		//auto* node = parseNode()
 
+	}
+
+	return nullptr;
 }
 
 ArithmeticNode* parseEquation(const std::string& equation)
 {
 	using namespace std;
 	
-	auto pos = equation.find('=');
+	string eq = equation;
+	auto pos = eq.find('=');
 	if (pos != string::npos)
 	{
-		string left = equation.substr(0, pos);
-		//string right = equation.substr()
+		string left = eq.substr(0, pos);
+		string right = eq.substr(pos + 1);
+		eq = "(";
+		eq += left + ")" + "-(" + right + ")";
 	}
 
-	return new ArithmeticNodeConstant<double>(0.0);
+	//trim
+	for (auto it = eq.begin(); it != eq.end();)
+	{
+		if (isblank(*it))
+		{
+			it = eq.erase(it);
+		}
+		else ++it;
+	}
+
+	vector<ArithmeticNode*> tmpNodes;
+
+	return parseNode(eq, tmpNodes);
 }

@@ -72,7 +72,9 @@ protected:
 	std::list<ArithmeticNode*> m_childNode;
 };
 
-class ArithmeticNodeOperatorBasic : public ArithmeticNodeOperatorInterface
+//////////////////////////////////////////////////////////////////////////
+
+class ArithmeticNodeOperatorImp : public ArithmeticNodeOperatorInterface
 {
 public:
 
@@ -99,7 +101,7 @@ public:
 	};
 
 
-	ArithmeticNodeOperatorBasic(OperatorType op) : m_op(op) {}
+	ArithmeticNodeOperatorImp(OperatorType op) : m_op(op) {}
 	
 	
 

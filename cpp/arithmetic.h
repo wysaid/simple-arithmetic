@@ -1,4 +1,4 @@
-/*
+﻿/*
 * arithmetic.h
 *
 *  Created on: 2016-9-10
@@ -10,8 +10,9 @@
 #define _ARITHMETIC_H_
 
 #include <list>
+#include <string>
 
-class ArithMeticNode
+class ArithmeticNode
 {
 public:
 
@@ -29,23 +30,23 @@ public:
 	virtual void setValue(NodeType type, double v) {}
 };
 
-template <class ConstantType = double>
-class ArithMeticNodeConstant : public ArithMeticNode
+template <typename ConstantType>
+class ArithmeticNodeConstant : public ArithmeticNode
 {
 public:
-	ArithMeticNodeConstant(ConstantType c) : m_constant(c) {}
+	ArithmeticNodeConstant(ConstantType c) : m_constant(c) {}
 	NodeType nodeType() { return CONSTANT; }
-	double value() { return (double)constant; }  //A constant must be compitable with 'double'.
+	double value() { return (double)m_constant; }  //A constant must be compitable with 'double'.
 	inline const ConstantType constant() const { return m_constant; }
 private:
 	ConstantType m_constant;
 };
 
 template<int VariableType>
-class ArithMeticNodeVariable : public ArithMeticNode
+class ArithmeticNodeVariable : public ArithmeticNode
 {
 public:
-	ArithMeticNodeVariable() { static_assert(VariableType == VARIABLE_X || VariableType == VARIABLE_X, "Invalid Variable Type!"); };
+	ArithmeticNodeVariable() { static_assert(VariableType == VARIABLE_X || VariableType == VARIABLE_X, "Invalid Variable Type!"); };
 	NodeType nodeType() { return VariableType; }
 	double value() { return m_variable; }
 	void setValue(NodeType type, double v) {
@@ -57,19 +58,58 @@ private:
 	double m_variable;
 };
 
-
-class ArithMeticNodeOperatorInterface : public ArithMeticNode
+class ArithmeticNodeOperatorInterface : public ArithmeticNode
 {
 public:
 
 	NodeType nodeType() const { return OPERATOR; }
 
-	inline std::list<ArithMeticNode>& childNode() { return m_childNode; }
-	inline const std::list<ArithMeticNode>& childNode() const { return m_childNode; }
+	inline std::list<ArithmeticNode*>& childNode() { return m_childNode; }
+	inline const std::list<ArithmeticNode*>& childNode() const { return m_childNode; }
+	inline void addChildNode(ArithmeticNode* node) { m_childNode.push_back(node); }
 
 protected:
-	std::list<ArithMeticNode> m_childNode;
+	std::list<ArithmeticNode*> m_childNode;
 };
 
+class ArithmeticNodeOperatorBasic : public ArithmeticNodeOperatorInterface
+{
+public:
+
+	enum OperatorType
+	{
+		OP_PLUS = '   +',
+		OP_MINUS = '   -',
+		OP_MULTIPLY = '   *',
+		OP_DIVID = '   /',
+		OP_EXP = ' exp',
+		OP_POWER = ' pow',
+		OP_ABS = ' abs',
+		OP_SIGN = 'sign',
+		OP_SQRT = 'sqrt',
+
+		OP_SIN = ' sin',
+		OP_ARCSIN = 'asin',
+		OP_ARCCOS = 'acos',
+		OP_TAN = ' tan',
+		OP_ATAN = 'atan',
+		OP_LOG = ' log',
+		OP_LOG2 = 'log2',
+		OP_LOG10 = '  lg',
+	};
+
+
+	ArithmeticNodeOperatorBasic(OperatorType op) : m_op(op) {}
+	
+	
+
+	bool check();
+	double value();
+
+private:
+	OperatorType m_op;
+};
+
+ArithmeticNode* parseEquation(const std::string& equation);
 
 #endif // !_ARITHMETIC_H_

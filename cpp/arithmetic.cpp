@@ -60,23 +60,60 @@ double ArithmeticNodeOperatorImp::value()
 	}
 }
 
-ArithmeticNode* parseNode(std::string& equation, std::vector<ArithmeticNode*>& tmpNodes)
+class Parser
 {
-	using namespace std;
+public:
 
-	auto brIndex = equation.find_last_of('(');
-	if (brIndex != string::npos)
+	ArithmeticNode* parseNode(const std::string& equation)
 	{
-		auto endIndex = equation.find(')', brIndex);
-		if (string::npos == endIndex)
-			return nullptr; //Invalid Equation
+		mTmpNodes.clear();
+		mBuffer[0] = '\0';
+		return parse(equation);
+	}
+	
+protected:
+	
+	ArithmeticNode* parse(const std::string& equation)
+	{
+		using namespace std;
 
-		//auto* node = parseNode()
+		auto brIndex = equation.find_last_of('(');
+		if (brIndex != string::npos)
+		{
+			auto endIndex = equation.find(')', brIndex + 1);
+			if (string::npos == endIndex)
+				return nullptr; //Invalid Equation
+
+			if (brIndex == 0 || isOperator(equation[brIndex - 1]))
+			{
+				const string& braceIn = equation.substr(brIndex + 1, endIndex - brIndex - 1);
+				mTmpNodes.push_back(parse(braceIn));
+
+				sprintf(mBuffer, "@%d", mTmpNodes.size() - 1);
+				const string& braceOut = equation.substr(0, brIndex) + mBuffer + equation.substr(endIndex + 1, equation.size() - endIndex - 1);
+				return parse(braceOut);
+			}
+			else
+			{
+
+			}
+		}
+
+		return nullptr;
+	}
+
+	bool isOperator(char c)
+	{
 
 	}
 
-	return nullptr;
-}
+protected:
+	char mBuffer[1024]; //for temp usage.
+
+	std::vector<ArithmeticNode*> mTmpNodes;
+};
+
+
 
 ArithmeticNode* parseEquation(const std::string& equation)
 {
@@ -102,7 +139,6 @@ ArithmeticNode* parseEquation(const std::string& equation)
 		else ++it;
 	}
 
-	vector<ArithmeticNode*> tmpNodes;
-
-	return parseNode(eq, tmpNodes);
+	Parser parser;
+	return parser.parseNode(eq);
 }

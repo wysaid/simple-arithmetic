@@ -6,4 +6,4 @@ View it online: [http://arithmetic.wysaid.org](http://arithmetic.wysaid.org "wys
 
 ## ScreenShot ##
 
-[![Tool](https://raw.githubusercontent.com/wysaid/simple-arithmetic/gh-pages/screenshot/screenshot.png "wysaid")](http://arithmetic.wysaid.org)
+[![Tool](https://raw.githubusercontent.com/wysaid/simple-arithmetic/gh-pages/screenshot/screenshot.jpg "wysaid")](http://arithmetic.wysaid.org)

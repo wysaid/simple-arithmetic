@@ -6,7 +6,6 @@
 *        Mail: admin@wysaid.org
 */
 
-#define SHOW_CONSOLE
 #include "../arithmetic.h"
 #include <iostream>
 using namespace std;

@@ -47,7 +47,7 @@ class ArithmeticNodeVariable : public ArithmeticNode
 {
 public:
 	ArithmeticNodeVariable() { static_assert(VariableType == VARIABLE_X || VariableType == VARIABLE_X, "Invalid Variable Type!"); };
-	NodeType nodeType() { return VariableType; }
+	int nodeType() { return VariableType; }
 	double value() { return m_variable; }
 	void setValue(NodeType type, double v) {
 		if (type == VariableType)

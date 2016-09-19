@@ -44,7 +44,7 @@ double ArithmeticNodeOperatorImp::value()
 	case OP_POWER: return pow(LEFT_VAR, RIGHT_VAR);
 
 	case OP_EXP: return exp(LEFT_VAR);
-	case OP_ABS: return abs(LEFT_VAR);
+	case OP_ABS: return fabs(LEFT_VAR);
 	case OP_SIGN: return (LEFT_VAR > 0.0) - (LEFT_VAR < 0.0);
 	case OP_SQRT: return sqrt(LEFT_VAR);
 	case OP_SIN: return sin(LEFT_VAR);
@@ -60,60 +60,26 @@ double ArithmeticNodeOperatorImp::value()
 	}
 }
 
-class Parser
+ArithmeticNode* parseNode(std::string& equation, std::vector<ArithmeticNode*>& tmpNodes)
 {
-public:
+	using namespace std;
 
-	ArithmeticNode* parseNode(const std::string& equation)
-	{
-		mTmpNodes.clear();
-		mBuffer[0] = '\0';
-		return parse(equation);
-	}
+	if (equation.empty()) return nullptr;
 	
-protected:
-	
-	ArithmeticNode* parse(const std::string& equation)
+
+	auto brIndex = equation.find_last_of('(');
+	if (brIndex != string::npos)
 	{
-		using namespace std;
+		auto endIndex = equation.find(')', brIndex);
+		if (string::npos == endIndex)
+			return nullptr; //Invalid Equation
 
-		auto brIndex = equation.find_last_of('(');
-		if (brIndex != string::npos)
-		{
-			auto endIndex = equation.find(')', brIndex + 1);
-			if (string::npos == endIndex)
-				return nullptr; //Invalid Equation
-
-			if (brIndex == 0 || isOperator(equation[brIndex - 1]))
-			{
-				const string& braceIn = equation.substr(brIndex + 1, endIndex - brIndex - 1);
-				mTmpNodes.push_back(parse(braceIn));
-
-				sprintf(mBuffer, "@%d", mTmpNodes.size() - 1);
-				const string& braceOut = equation.substr(0, brIndex) + mBuffer + equation.substr(endIndex + 1, equation.size() - endIndex - 1);
-				return parse(braceOut);
-			}
-			else
-			{
-
-			}
-		}
-
-		return nullptr;
-	}
-
-	bool isOperator(char c)
-	{
+		//auto* node = parseNode()
 
 	}
 
-protected:
-	char mBuffer[1024]; //for temp usage.
-
-	std::vector<ArithmeticNode*> mTmpNodes;
-};
-
-
+	return nullptr;
+}
 
 ArithmeticNode* parseEquation(const std::string& equation)
 {
@@ -139,6 +105,7 @@ ArithmeticNode* parseEquation(const std::string& equation)
 		else ++it;
 	}
 
-	Parser parser;
-	return parser.parseNode(eq);
+	vector<ArithmeticNode*> tmpNodes;
+
+	return parseNode(eq, tmpNodes);
 }

@@ -4,6 +4,7 @@
 *  Created on: 2016-9-10
 *      Author: Wang Yang
 *        Mail: admin@wysaid.org
+*        Blog: wysaid.org
 */
 
 #ifndef _ARITHMETIC_H_
@@ -16,6 +17,8 @@ class ArithmeticNode
 {
 public:
 
+    virtual ~ArithmeticNode() {}
+    
 	enum NodeType {
 		INVALID, 
 		OPERATOR,
@@ -46,7 +49,7 @@ template<int VariableType>
 class ArithmeticNodeVariable : public ArithmeticNode
 {
 public:
-	ArithmeticNodeVariable() { static_assert(VariableType == VARIABLE_X || VariableType == VARIABLE_X, "Invalid Variable Type!"); };
+	ArithmeticNodeVariable() { static_assert(VariableType == VARIABLE_X || VariableType == VARIABLE_Y, "Invalid Variable Type!"); };
 	int nodeType() { return VariableType; }
 	double value() { return m_variable; }
 	void setValue(NodeType type, double v) {
@@ -62,6 +65,15 @@ class ArithmeticNodeOperatorInterface : public ArithmeticNode
 {
 public:
 
+    virtual ~ArithmeticNodeOperatorInterface()
+    {
+        for(auto* node : m_childNode)
+        {
+            delete node;
+        }
+        m_childNode.clear();
+    }
+    
 	NodeType nodeType() const { return OPERATOR; }
 
 	inline std::list<ArithmeticNode*>& childNode() { return m_childNode; }

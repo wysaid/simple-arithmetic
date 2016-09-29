@@ -164,14 +164,14 @@ protected:
             for(before = (int)opIndex - 1; before >= 0; --before)
             {
                 int c = equation[before];
-                if(!(isdigit(c) || c == '.' || c == '@'))
+                if(!(isdigit(c) || c == '.' || c == '@' || c == 'x' || c == 'y'))
                     break;
             }
             
             for(after = (int)opIndex + 1; after < equation.size(); ++after)
             {
                 int c = equation[after];
-                if(!(isdigit(c) || c == '.' || c == '@'))
+                if(!(isdigit(c) || c == '.' || c == '@' || c == 'x' || c == 'y'))
                     break;
             }
             

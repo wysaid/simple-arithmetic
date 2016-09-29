@@ -19,7 +19,8 @@ public:
 
     virtual ~ArithmeticNode() {}
     
-	enum NodeType {
+	enum NodeType
+    {
 		INVALID, 
 		OPERATOR,
 		CONSTANT,		
@@ -53,7 +54,8 @@ public:
     ArithmeticNodeVariable() : m_variable(0.0) { static_assert(VariableType == VARIABLE_X || VariableType == VARIABLE_Y, "Invalid Variable Type!"); };
 	int nodeType() { return VariableType; }
 	double value() { return m_variable; }
-	void setValue(NodeType type, double v) {
+	void setValue(NodeType type, double v)
+    {
 		if (type == VariableType)
 			m_variable = v;
 	}
@@ -73,6 +75,12 @@ public:
             delete node;
         }
         m_childNode.clear();
+    }
+
+    void setValue(NodeType type, double v)
+    {
+        for(auto* node : m_childNode)
+            node->setValue(type, v);
     }
     
 	NodeType nodeType() const { return OPERATOR; }

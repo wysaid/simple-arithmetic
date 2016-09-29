@@ -29,6 +29,7 @@ public:
 
 	virtual NodeType nodeType() const { return INVALID; }
 	virtual double value() = 0;
+    virtual bool isValid() { return true; }
 
 	virtual void setValue(NodeType type, double v) {}
 };
@@ -49,7 +50,7 @@ template<int VariableType>
 class ArithmeticNodeVariable : public ArithmeticNode
 {
 public:
-	ArithmeticNodeVariable() { static_assert(VariableType == VARIABLE_X || VariableType == VARIABLE_Y, "Invalid Variable Type!"); };
+    ArithmeticNodeVariable() : m_variable(0.0) { static_assert(VariableType == VARIABLE_X || VariableType == VARIABLE_Y, "Invalid Variable Type!"); };
 	int nodeType() { return VariableType; }
 	double value() { return m_variable; }
 	void setValue(NodeType type, double v) {
@@ -76,9 +77,9 @@ public:
     
 	NodeType nodeType() const { return OPERATOR; }
 
-	inline std::list<ArithmeticNode*>& childNode() { return m_childNode; }
+	inline void removeChildNodes() { m_childNode.clear(); }
 	inline const std::list<ArithmeticNode*>& childNode() const { return m_childNode; }
-	inline void addChildNode(ArithmeticNode* node) { m_childNode.push_back(node); }
+	inline void addChildNode(ArithmeticNode* node) { if(node != nullptr) m_childNode.push_back(node); }
 
 protected:
 	std::list<ArithmeticNode*> m_childNode;
@@ -92,12 +93,13 @@ public:
 
 	enum OperatorType
 	{
-		OP_PLUS = '   +',
-		OP_MINUS = '   -',
-		OP_MULTIPLY = '   *',
-		OP_DIVID = '   /',
-		OP_EXP = ' exp',
-		OP_POWER = ' pow',
+		OP_PLUS = '+',
+		OP_MINUS = '-',
+		OP_MULTIPLY = '*',
+		OP_DIVID = '/',
+		OP_POWER = '^',
+        
+        OP_EXP = ' exp',
 		OP_ABS = ' abs',
 		OP_SIGN = 'sign',
 		OP_SQRT = 'sqrt',
@@ -117,7 +119,7 @@ public:
 	
 	
 
-	bool check();
+	bool isValid();
 	double value();
 
 private:

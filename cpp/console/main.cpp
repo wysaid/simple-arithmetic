@@ -13,10 +13,15 @@ using namespace std;
 
 int main()
 {
-	string s = "1 + 2 + (1+1+1+1+1) ^ (((2+2)+(3-2)) + 4) * 2+1+1+1";
+	string s = "(1+1+1+1) ^ (((2+2)+(3-2)) * 0.5) + 5*(6-2*4)";
 	ArithmeticNode* node = parseEquation(s);
 
-//	cout << node->value() << endl;
+    node->setValue(ArithmeticNode::VARIABLE_X, 55);
+    node->setValue(ArithmeticNode::VARIABLE_Y, 88);
+    
+    if(node != nullptr && node->isValid())
+        printf("\n%s = %g\n", s.c_str(), node->value());
+    else puts("Invalid Equation!");
 
     delete node;
 	return 0;

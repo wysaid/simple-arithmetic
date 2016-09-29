@@ -20,9 +20,11 @@
 #define HELPER_2_ARG(op) \
 return LEFT_VAR op RIGHT_VAR \
 
+#define BUFFER_SIZE 1024
+
 using namespace std;
 
-bool ArithmeticNodeOperatorImp::check()
+bool ArithmeticNodeOperatorImp::isValid()
 {
 	switch (m_op)
 	{
@@ -39,7 +41,7 @@ bool ArithmeticNodeOperatorImp::check()
 
 double ArithmeticNodeOperatorImp::value()
 {
-	if (!check())
+	if (!isValid())
 		return 0.0;
 
 	switch (m_op)
@@ -70,6 +72,7 @@ double ArithmeticNodeOperatorImp::value()
 class Parser
 {
 public:
+    Parser() : mOperators("+-*/^") {}
     
     ArithmeticNode* parseNode(const string& equation)
 	{
@@ -83,10 +86,10 @@ public:
         int index = 0;
         for(auto& s : mTmpEquations)
         {
-            printf("%s,\t\t\t%d\n", s.c_str(), index++);
+            printf("@%d = %6s,\n", index++, s.c_str());
         }
         
-        puts(result.c_str());
+        printf("@%d = %6s,\n", index, result.c_str());
         
         return parse(result);
 	}
@@ -131,7 +134,7 @@ protected:
         //乘除
         equation = parseOperator(equation, "*/");
         //加减
-        equation = parseOperator(equation, "+=");
+        equation = parseOperator(equation, "+-");
         return equation;
     }
     
@@ -140,15 +143,20 @@ protected:
     {
         while(1)
         {
-            int opIndex, sz = (int)equation.size();
+            int opIndex = -1, opCount = 0, sz = (int)equation.size();
             
-            for(opIndex = 0; opIndex != sz; ++opIndex)
+            for(int i = 0; i != sz; ++i)
             {
-                if(op.find_first_of(equation[opIndex]) != string::npos)
-                    break;
+                if(opIndex < 0 && op.find_first_of(equation[i]) != string::npos)
+                {
+                    opIndex = i;
+                }
+                
+                if(mOperators.find_first_of(equation[i]) != string::npos)
+                    ++opCount;
             }
             
-            if(opIndex >= sz)
+            if(opIndex < 0 || opCount == 1)
                 break;
             
             int before, after;
@@ -169,7 +177,7 @@ protected:
             
             if(before == opIndex - 1 || after == opIndex + 1)
             {
-                puts("op使用错误!");
+                puts("错误的表达式!");
                 equation = "";
                 break;
             }
@@ -188,60 +196,76 @@ protected:
         return equation;
     }
     
+    ArithmeticNode* parseSimpleNode(const string& s)
+    {
+        ArithmeticNode* node = nullptr;
+        
+        if(s.size() == 1)
+        {
+            if(s[0] == 'x')
+                return new ArithmeticNodeVariable<ArithmeticNode::VARIABLE_X>();
+            
+            if(s[0] == 'y')
+                return new ArithmeticNodeVariable<ArithmeticNode::VARIABLE_Y>();
+            
+            if(s[0] == 'e')
+            {
+                return new ArithmeticNodeConstant<double>(M_E);
+            }
+        }
+        
+        if(s.compare("pi") == 0)
+        {
+            return new ArithmeticNodeConstant<double>(M_PI);
+        }
+        
+        if(s[0] == '@')
+        {
+            int index;
+            if(sscanf(s.c_str() + 1, "%d", &index) == 1 && index < mTmpEquations.size())
+                return parse(mTmpEquations[index]);
+            return nullptr;
+        }
+        else if(isdigit(s[0]) || s[0] == '.')
+        {
+            double value;
+            sscanf(s.c_str(), "%lf", &value);
+            node = new ArithmeticNodeConstant<double>(value);
+        }
+        else
+        {
+            printf("Invalid node: %s\n", s.c_str());
+        }
+        
+        return node;
+    }
+    
     //Recursive parse for the equation tree.
 	ArithmeticNode* parse(const string& equation)
 	{
         if(equation.empty())
             return nullptr; //Invalid case.
         
-        if(isdigit(equation[0]) || equation[0] == '.')
+        char op, left[128], right[128];
+        if(sscanf(equation.c_str(), "%127[^+-*/^]%c%127s", left, &op, right) == 3)
         {
-            double value;
-            if(sscanf(equation.c_str(), "%lf", &value) == 1)
-                return new ArithmeticNodeConstant<double>(value);
-            return nullptr;
+            ArithmeticNode *leftNode, *rightNode;
+            leftNode = parseSimpleNode(left);
+            rightNode = parseSimpleNode(right);
+            ArithmeticNodeOperatorImp* opNode = new ArithmeticNodeOperatorImp((ArithmeticNodeOperatorImp::OperatorType)op);
+            opNode->addChildNode(leftNode);
+            opNode->addChildNode(rightNode);
+            return opNode;
         }
         
-        if(equation[0] == '@')
-        {
-            int index;
-            if(sscanf(equation.c_str() + 1, "%d", &index) == 1 && index < mTmpEquations.size())
-                return parse(mTmpEquations[index]);
-            return nullptr;
-        }
-        
-        if(equation.size() == 1)
-        {
-            if(equation[0] == 'x')
-                return new ArithmeticNodeVariable<ArithmeticNode::VARIABLE_X>();
-            
-            if(equation[0] == 'y')
-                return new ArithmeticNodeVariable<ArithmeticNode::VARIABLE_Y>();
-        }
-        
-        if(equation.compare("pi") == 0)
-        {
-            return new ArithmeticNodeConstant<double>(M_PI);
-        }
-        
-        if(equation.compare("e") == 0)
-        {
-            return new ArithmeticNodeConstant<double>(M_E);
-        }
-        
-		//此时已经没有括号, 优先级最高为 ^, 之后是 */， 然后是 +-
-        for(auto it = equation.begin(); it != equation.end(); ++it)
-        {
-            
-        }
-
-		return nullptr;
-	}
+        return parseSimpleNode(equation);
+}
 
 protected:
-	char mBuffer[1024]; //for temp usage.
+	char mBuffer[BUFFER_SIZE]; //for temp usage.
 
     vector<string> mTmpEquations;
+    string mOperators;
 };
 
 

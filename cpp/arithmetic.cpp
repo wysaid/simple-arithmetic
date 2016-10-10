@@ -66,6 +66,7 @@ double ArithmeticNodeOperatorImp::value()
 	case OP_SQRT: return sqrt(LEFT_VAR);
 	case OP_SIN: return sin(LEFT_VAR);
 	case OP_ARCSIN: return asin(LEFT_VAR);
+    case OP_COS: return cos(LEFT_VAR);
 	case OP_ARCCOS: return acos(LEFT_VAR);
 	case OP_TAN: return tan(LEFT_VAR);
 	case OP_ARCTAN: return atan(LEFT_VAR);
@@ -315,7 +316,7 @@ protected:
             auto opType = getOpTypeByName(opName.c_str());
             if(opType != ArithmeticNode::OP_INVALID)
             {
-                string opChild = s.substr(opIndex + 1, s.size() - 1);
+                string opChild = s.substr(opIndex + 1, s.size() - opIndex - 2);
                 auto* childNode = parse(opChild);
                 
                 if(childNode == nullptr)

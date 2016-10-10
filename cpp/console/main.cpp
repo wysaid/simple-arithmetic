@@ -29,9 +29,10 @@ int main(int argc, char **argv)
 
     if(node != nullptr && node->isValid())
     {
-        node->setValue(ArithmeticNode::VARIABLE_X, 55);
-        node->setValue(ArithmeticNode::VARIABLE_Y, 88);
-        printf("\n%s = %g\n", s.c_str(), node->value());
+        double x = 55, y = 88;
+        node->setValue(ArithmeticNode::VARIABLE_X, x);
+        node->setValue(ArithmeticNode::VARIABLE_Y, y);
+        printf("\nx=%g\ny=%g\n%s = %g\n", x, y, s.c_str(), node->value());
     }
     else
     {

@@ -61,7 +61,10 @@ public:
     
     virtual void removeChildNodes() {}
     virtual const std::list<ArithmeticNode*>* childNode() const { return nullptr; }
+    virtual std::list<ArithmeticNode*>* childNode() { return nullptr; }
     virtual void addChildNode(ArithmeticNode* node) {}
+    
+    virtual bool canReduce() { return false; } //表达式是否能够简化, 不包含未知数的节点可以全部替换为 constant节点
 };
 
 template <typename ConstantType>
@@ -72,6 +75,7 @@ public:
 	NodeType nodeType() { return CONSTANT; }
 	double value() { return (double)m_constant; }  //A constant must be compitable with 'double'.
 	inline const ConstantType constant() const { return m_constant; }
+    bool canReduce() { return true; }
 private:
 	ConstantType m_constant;
 };
@@ -89,6 +93,7 @@ public:
 			m_variable = v;
 	}
 
+    bool canReduce() { return false; }
 private:
 	double m_variable;
 };
@@ -116,8 +121,11 @@ public:
 
 	void removeChildNodes() { m_childNode.clear(); }
 	const std::list<ArithmeticNode*>* childNode() const { return &m_childNode; }
+    std::list<ArithmeticNode*>* childNode() { return &m_childNode; }
 	void addChildNode(ArithmeticNode* node) { if(node != nullptr) m_childNode.push_back(node); }
 
+    bool canReduce() { for(auto* node : m_childNode) if(!node->canReduce()) return false; return true; }
+    
 protected:
 	std::list<ArithmeticNode*> m_childNode;
 };
@@ -138,5 +146,6 @@ private:
 };
 
 ArithmeticNode* parseEquation(const std::string& equation);
+void reduceNode(ArithmeticNode** pnode); //简化表达式, 保留变量。 对于不包含变量的表达式， 将直接变成一个 constant.
 
 #endif // !_ARITHMETIC_H_

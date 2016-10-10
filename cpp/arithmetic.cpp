@@ -381,7 +381,6 @@ protected:
 };
 
 
-
 ArithmeticNode* parseEquation(const string& equation)
 {
 	string eq = equation;
@@ -411,3 +410,47 @@ ArithmeticNode* parseEquation(const string& equation)
 	Parser parser;
 	return parser.parseNode(eq);
 }
+
+void reduceNode(ArithmeticNode** pnode)
+{
+    ArithmeticNode* node = *pnode;
+    
+    if(node->canReduce())
+    {
+        auto* newNode = new ArithmeticNodeConstant<double>(node->value());
+        delete *pnode;
+        *pnode = newNode;
+        return;
+    }
+    
+    auto childNodes = node->childNode();
+    
+    if(childNodes != nullptr && !childNodes->empty())
+    {
+        for(auto& childNode : *childNodes)
+        {
+            if(childNode->canReduce())
+            {
+                auto* newNode = new ArithmeticNodeConstant<double>(childNode->value());
+                delete childNode;
+                childNode = newNode;
+            }
+            else
+            {
+                auto* grandChildNodes = childNode->childNode();
+                if(grandChildNodes != nullptr && !grandChildNodes->empty())
+                {
+                    for(auto& grandChildNode : *grandChildNodes)
+                    {
+                        reduceNode(&grandChildNode);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+

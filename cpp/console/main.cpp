@@ -39,6 +39,8 @@ int main(int argc, char **argv)
         puts("Invalid Equation!");
     }
     
+//    reduceNode(&node);
+//    printf("Node after simplify: %g\n", node->value());
     delete node;
 	return 0;
 }

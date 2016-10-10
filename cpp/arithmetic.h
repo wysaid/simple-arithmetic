@@ -58,6 +58,10 @@ public:
     virtual bool isValid() { return true; }
 
 	virtual void setValue(NodeType type, double v) {}
+    
+    virtual void removeChildNodes() {}
+    virtual const std::list<ArithmeticNode*>* childNode() const { return nullptr; }
+    virtual void addChildNode(ArithmeticNode* node) {}
 };
 
 template <typename ConstantType>
@@ -110,9 +114,9 @@ public:
     
 	NodeType nodeType() const { return OPERATOR; }
 
-	inline void removeChildNodes() { m_childNode.clear(); }
-	inline const std::list<ArithmeticNode*>& childNode() const { return m_childNode; }
-	inline void addChildNode(ArithmeticNode* node) { if(node != nullptr) m_childNode.push_back(node); }
+	void removeChildNodes() { m_childNode.clear(); }
+	const std::list<ArithmeticNode*>* childNode() const { return &m_childNode; }
+	void addChildNode(ArithmeticNode* node) { if(node != nullptr) m_childNode.push_back(node); }
 
 protected:
 	std::list<ArithmeticNode*> m_childNode;

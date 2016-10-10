@@ -27,8 +27,33 @@ public:
 		VARIABLE_X,
 		VARIABLE_Y,
 	};
-
-	virtual NodeType nodeType() const { return INVALID; }
+    
+    enum OperatorType
+    {
+        OP_PLUS = '+',
+        OP_MINUS = '-',
+        OP_MULTIPLY = '*',
+        OP_DIVID = '/',
+        OP_POWER = '^',
+        
+        OP_EXP = ' exp',
+        OP_ABS = ' abs',
+        OP_SIGN = 'sign',
+        OP_SQRT = 'sqrt',
+        
+        OP_SIN = ' sin',
+        OP_COS = ' cos',
+        OP_ARCSIN = 'asin',
+        OP_ARCCOS = 'acos',
+        OP_TAN = ' tan',
+        OP_ARCTAN = 'atan',
+        OP_LOG = ' log',
+        OP_LOG2 = 'log2',
+        OP_LOG10 = '  lg',
+        OP_INVALID = 0
+    };
+    
+    virtual NodeType nodeType() const { return INVALID; }
 	virtual double value() = 0;
     virtual bool isValid() { return true; }
 
@@ -99,34 +124,8 @@ class ArithmeticNodeOperatorImp : public ArithmeticNodeOperatorInterface
 {
 public:
 
-	enum OperatorType
-	{
-		OP_PLUS = '+',
-		OP_MINUS = '-',
-		OP_MULTIPLY = '*',
-		OP_DIVID = '/',
-		OP_POWER = '^',
-        
-        OP_EXP = ' exp',
-		OP_ABS = ' abs',
-		OP_SIGN = 'sign',
-		OP_SQRT = 'sqrt',
-
-		OP_SIN = ' sin',
-		OP_ARCSIN = 'asin',
-		OP_ARCCOS = 'acos',
-		OP_TAN = ' tan',
-		OP_ATAN = 'atan',
-		OP_LOG = ' log',
-		OP_LOG2 = 'log2',
-		OP_LOG10 = '  lg',
-	};
-
-
 	ArithmeticNodeOperatorImp(OperatorType op) : m_op(op) {}
 	
-	
-
 	bool isValid();
 	double value();
 

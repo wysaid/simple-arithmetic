@@ -15,6 +15,14 @@
 #include <cmath>
 #include <vector>
 
+#ifndef M_E
+#define M_E        2.71828182845904523536   // e
+#endif
+
+#ifndef M_PI
+#define M_PI       3.14159265358979323846   // pi
+#endif
+
 #define LEFT_VAR m_childNode.front()->value()
 #define RIGHT_VAR m_childNode.back()->value()
 #define HELPER_2_ARG(op) \
@@ -60,13 +68,75 @@ double ArithmeticNodeOperatorImp::value()
 	case OP_ARCSIN: return asin(LEFT_VAR);
 	case OP_ARCCOS: return acos(LEFT_VAR);
 	case OP_TAN: return tan(LEFT_VAR);
-	case OP_ATAN: return atan(LEFT_VAR);
+	case OP_ARCTAN: return atan(LEFT_VAR);
 	case OP_LOG: return log(LEFT_VAR);
 	case OP_LOG2: return log2(LEFT_VAR);
 	case OP_LOG10: return log10(LEFT_VAR);
 	default:
 		return 0.0;
 	}
+}
+
+const char* g_functions[] = {
+    "exp",
+    "abs",
+    "sign",
+    "sqrt",
+    "sin",
+    "asin",
+    "arcsin",
+    "cos",
+    "acos",
+    "arccos",
+    "tan",
+    "atan",
+    "arctan",
+    "ln",
+    "log",
+    "log2",
+    "lg",
+    "log10",
+};
+
+ArithmeticNode::OperatorType g_opType[] =
+{
+    ArithmeticNode::OP_EXP, //exp
+    ArithmeticNode::OP_ABS, //abs
+    ArithmeticNode::OP_SIGN, //sign
+    ArithmeticNode::OP_SQRT, //sqrt
+    ArithmeticNode::OP_SIN, //sin
+    ArithmeticNode::OP_ARCSIN, //asin
+    ArithmeticNode::OP_ARCSIN, //arcsin
+    ArithmeticNode::OP_COS, //cos
+    ArithmeticNode::OP_ARCCOS, //acos
+    ArithmeticNode::OP_ARCCOS, //arccos
+    ArithmeticNode::OP_TAN, //tan
+    ArithmeticNode::OP_ARCTAN, //atan
+    ArithmeticNode::OP_ARCTAN, //arctan
+    ArithmeticNode::OP_LOG, //ln
+    ArithmeticNode::OP_LOG, //log
+    ArithmeticNode::OP_LOG2, //log2
+    ArithmeticNode::OP_LOG10, //lg
+    ArithmeticNode::OP_LOG10, //log10
+};
+
+#define _IF_ARITHMETIC_OP_COMPARE(op) if(strcmp(name, op) == 0)
+
+ArithmeticNode::OperatorType getOpTypeByName(const char* name)
+{
+    static_assert(sizeof(g_functions) / sizeof(*g_functions) == sizeof(g_opType) / sizeof(*g_opType), "Invalid Rule Strings!");
+    
+    auto type = ArithmeticNode::OP_INVALID;
+    
+    for(int i = 0; i != sizeof(g_functions) / sizeof(*g_functions); ++i)
+    {
+        if(strcmp(name, g_functions[i]) == 0)
+        {
+            return g_opType[i];
+        }
+    }
+    
+    return type;
 }
 
 class Parser
@@ -119,7 +189,25 @@ protected:
             eq = extractOP(eq);
             sprintf(mBuffer, "@%d", (int)mTmpEquations.size());
             mTmpEquations.push_back(eq);
-            equation = equation.substr(0, startIndex) + mBuffer + equation.substr(endIndex + 1, equation.size() - endIndex - 1);
+            
+            //检查括号是否前置三角函数等
+            if(startIndex != 0 && isalpha(equation[startIndex - 1]))
+            {
+                int opIndex = (int)startIndex - 2;
+                while(opIndex >= 0 && isalpha(equation[opIndex])) --opIndex;
+                if(opIndex < 0 || !isalpha(equation[opIndex])) ++opIndex;
+                
+                eq = equation.substr(opIndex, startIndex - opIndex);
+                sprintf(mBuffer, "%s(@%d)", eq.c_str(), (int)mTmpEquations.size() - 1);
+                mTmpEquations.push_back(mBuffer);
+                sprintf(mBuffer, "@%d", (int)mTmpEquations.size() - 1);
+                
+                equation = equation.substr(0, opIndex) + mBuffer + equation.substr(endIndex + 1, equation.size() - endIndex - 1);
+            }
+            else
+            {
+                equation = equation.substr(0, startIndex) + mBuffer + equation.substr(endIndex + 1, equation.size() - endIndex - 1);
+            }
         }
         
         equation = extractOP(equation);
@@ -217,6 +305,29 @@ protected:
         if(s.compare("pi") == 0)
         {
             return new ArithmeticNodeConstant<double>(M_PI);
+        }
+        
+        auto opIndex = s.find_first_of('(');
+        
+        if(opIndex != string::npos)
+        {
+            string opName = s.substr(0, opIndex);
+            auto opType = getOpTypeByName(opName.c_str());
+            if(opType != ArithmeticNode::OP_INVALID)
+            {
+                string opChild = s.substr(opIndex + 1, s.size() - 1);
+                auto* childNode = parse(opChild);
+                
+                if(childNode == nullptr)
+                {
+                    printf("Invalid node: %s\n", opChild.c_str());
+                    return nullptr;
+                }
+                
+                auto* opNode = new ArithmeticNodeOperatorImp(opType);
+                opNode->addChildNode(childNode);
+                return opNode;
+            }
         }
         
         if(s[0] == '@')

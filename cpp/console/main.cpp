@@ -11,9 +11,20 @@
 #include <iostream>
 using namespace std;
 
-int main()
+int main(int argc, char **argv)
 {
-	string s = "(1+1+1+1) ^ (((2+2)+(3-2)) * 0.5) + 5*(6-2*4) + x^2 + y^2";
+    string s;// = "(1+1+1+1) ^ tan(((2+2)+(3-2)) * 0.5) + 5*(6-2*4) + cos(x^2) + sin(y)^2";
+
+	if (argc == 1)
+	{
+		puts("Input your equation:");
+		getline(cin, s);
+	}
+	else
+	{
+		s = argv[1];
+	}
+
 	ArithmeticNode* node = parseEquation(s);
 
     if(node != nullptr && node->isValid())

@@ -121,8 +121,6 @@ ArithmeticNode::OperatorType g_opType[] =
     ArithmeticNode::OP_LOG10, //log10
 };
 
-#define _IF_ARITHMETIC_OP_COMPARE(op) if(strcmp(name, op) == 0)
-
 ArithmeticNode::OperatorType getOpTypeByName(const char* name)
 {
     static_assert(sizeof(g_functions) / sizeof(*g_functions) == sizeof(g_opType) / sizeof(*g_opType), "Invalid Rule Strings!");

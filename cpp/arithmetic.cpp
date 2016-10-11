@@ -1,11 +1,11 @@
 ﻿/*
-* arithmetic.cpp
-*
-*  Created on: 2016-9-10
-*      Author: Wang Yang
-*        Mail: admin@wysaid.org
-*        Blog: wysaid.org
-*/
+ * arithmetic.cpp
+ *
+ *  Created on: 2016-9-10
+ *      Author: Wang Yang
+ *        Mail: admin@wysaid.org
+ *        Blog: wysaid.org
+ */
 
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
@@ -34,48 +34,48 @@ using namespace std;
 
 bool ArithmeticNodeOperatorImp::isValid()
 {
-	switch (m_op)
-	{
-	case OP_PLUS: 
-	case OP_MINUS: 
-	case OP_MULTIPLY: 
-	case OP_DIVID: 
-	case OP_POWER:
-		return m_childNode.size() >= 2;
-	default:
-		return m_childNode.size() >= 1;
-	}
+    switch (m_op)
+    {
+        case OP_PLUS:
+        case OP_MINUS:
+        case OP_MULTIPLY:
+        case OP_DIVID:
+        case OP_POWER:
+            return m_childNode.size() >= 2;
+        default:
+            return m_childNode.size() >= 1;
+    }
 }
 
 double ArithmeticNodeOperatorImp::value()
 {
-	if (!isValid())
-		return 0.0;
-
-	switch (m_op)
-	{
-	case OP_PLUS: HELPER_2_ARG(+);
-	case OP_MINUS: HELPER_2_ARG(-);
-	case OP_MULTIPLY: HELPER_2_ARG(*);
-	case OP_DIVID: HELPER_2_ARG(/);
-	case OP_POWER: return pow(LEFT_VAR, RIGHT_VAR);
-
-	case OP_EXP: return exp(LEFT_VAR);
-	case OP_ABS: return fabs(LEFT_VAR);
-	case OP_SIGN: return (LEFT_VAR > 0.0) - (LEFT_VAR < 0.0);
-	case OP_SQRT: return sqrt(LEFT_VAR);
-	case OP_SIN: return sin(LEFT_VAR);
-	case OP_ARCSIN: return asin(LEFT_VAR);
-    case OP_COS: return cos(LEFT_VAR);
-	case OP_ARCCOS: return acos(LEFT_VAR);
-	case OP_TAN: return tan(LEFT_VAR);
-	case OP_ARCTAN: return atan(LEFT_VAR);
-	case OP_LOG: return log(LEFT_VAR);
-	case OP_LOG2: return log2(LEFT_VAR);
-	case OP_LOG10: return log10(LEFT_VAR);
-	default:
-		return 0.0;
-	}
+    if (!isValid())
+        return 0.0;
+    
+    switch (m_op)
+    {
+        case OP_PLUS: HELPER_2_ARG(+);
+        case OP_MINUS: HELPER_2_ARG(-);
+        case OP_MULTIPLY: HELPER_2_ARG(*);
+        case OP_DIVID: HELPER_2_ARG(/);
+        case OP_POWER: return pow(LEFT_VAR, RIGHT_VAR);
+            
+        case OP_EXP: return exp(LEFT_VAR);
+        case OP_ABS: return fabs(LEFT_VAR);
+        case OP_SIGN: return (LEFT_VAR > 0.0) - (LEFT_VAR < 0.0);
+        case OP_SQRT: return sqrt(LEFT_VAR);
+        case OP_SIN: return sin(LEFT_VAR);
+        case OP_ARCSIN: return asin(LEFT_VAR);
+        case OP_COS: return cos(LEFT_VAR);
+        case OP_ARCCOS: return acos(LEFT_VAR);
+        case OP_TAN: return tan(LEFT_VAR);
+        case OP_ARCTAN: return atan(LEFT_VAR);
+        case OP_LOG: return log(LEFT_VAR);
+        case OP_LOG2: return log2(LEFT_VAR);
+        case OP_LOG10: return log10(LEFT_VAR);
+        default:
+            return 0.0;
+    }
 }
 
 const char* g_functions[] = {
@@ -146,9 +146,9 @@ public:
     Parser() : mOperators("+-*/^") {}
     
     ArithmeticNode* parseNode(const string& equation)
-	{
+    {
         mTmpEquations.clear();
-		mBuffer[0] = '\0';
+        mBuffer[0] = '\0';
         
         puts(equation.c_str());
         
@@ -163,10 +163,10 @@ public:
         printf("@%d = %6s,\n", index, result.c_str());
         
         return parse(result);
-	}
-	
+    }
+    
 protected:
-
+    
     //消除所有优先级
     string extractEquation(string equation)
     {
@@ -353,8 +353,8 @@ protected:
     }
     
     //Recursive parse for the equation tree.
-	ArithmeticNode* parse(const string& equation)
-	{
+    ArithmeticNode* parse(const string& equation)
+    {
         if(equation.empty())
             return nullptr; //Invalid case.
         
@@ -371,11 +371,11 @@ protected:
         }
         
         return parseSimpleNode(equation);
-}
-
+    }
+    
 protected:
-	char mBuffer[BUFFER_SIZE]; //for temp usage.
-
+    char mBuffer[BUFFER_SIZE]; //for temp usage.
+    
     vector<string> mTmpEquations;
     string mOperators;
 };
@@ -383,32 +383,32 @@ protected:
 
 ArithmeticNode* parseEquation(const string& equation)
 {
-	string eq = equation;
-	auto pos = eq.find('=');
-	if (pos != string::npos)
-	{
-		string left = eq.substr(0, pos);
-		string right = eq.substr(pos + 1);
-		eq = "(";
-		eq += left + ")" + "-(" + right + ")";
-	}
-
-	//trim
-	for (auto it = eq.begin(); it != eq.end();)
-	{
+    string eq = equation;
+    auto pos = eq.find('=');
+    if (pos != string::npos)
+    {
+        string left = eq.substr(0, pos);
+        string right = eq.substr(pos + 1);
+        eq = "(";
+        eq += left + ")" + "-(" + right + ")";
+    }
+    
+    //trim
+    for (auto it = eq.begin(); it != eq.end();)
+    {
         *it = tolower(*it);
         if(*it == '[' || *it == '{') *it = '(';
         else if(*it == ']' || *it == '}') *it = ')';
-
-		if (isblank(*it))
-		{
-			it = eq.erase(it);
-		}
-		else ++it;
-	}
-
-	Parser parser;
-	return parser.parseNode(eq);
+        
+        if (isblank(*it))
+        {
+            it = eq.erase(it);
+        }
+        else ++it;
+    }
+    
+    Parser parser;
+    return parser.parseNode(eq);
 }
 
 void reduceNode(ArithmeticNode** pnode)

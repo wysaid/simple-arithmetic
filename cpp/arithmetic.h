@@ -1,11 +1,11 @@
 ﻿/*
-* arithmetic.h
-*
-*  Created on: 2016-9-10
-*      Author: Wang Yang
-*        Mail: admin@wysaid.org
-*        Blog: wysaid.org
-*/
+ * arithmetic.h
+ *
+ *  Created on: 2016-9-10
+ *      Author: Wang Yang
+ *        Mail: admin@wysaid.org
+ *        Blog: wysaid.org
+ */
 
 #ifndef _ARITHMETIC_H_
 #define _ARITHMETIC_H_
@@ -16,17 +16,17 @@
 class ArithmeticNode
 {
 public:
-
+    
     virtual ~ArithmeticNode() {}
     
-	enum NodeType
+    enum NodeType
     {
-		INVALID, 
-		OPERATOR,
-		CONSTANT,		
-		VARIABLE_X,
-		VARIABLE_Y,
-	};
+        INVALID,
+        OPERATOR,
+        CONSTANT,
+        VARIABLE_X,
+        VARIABLE_Y,
+    };
     
     enum OperatorType
     {
@@ -54,10 +54,10 @@ public:
     };
     
     virtual NodeType nodeType() const { return INVALID; }
-	virtual double value() = 0;
+    virtual double value() = 0;
     virtual bool isValid() { return true; }
-
-	virtual void setValue(NodeType type, double v) {}
+    
+    virtual void setValue(NodeType type, double v) {}
     
     virtual void removeChildNodes() {}
     virtual const std::list<ArithmeticNode*>* childNode() const { return nullptr; }
@@ -71,13 +71,13 @@ template <typename ConstantType>
 class ArithmeticNodeConstant : public ArithmeticNode
 {
 public:
-	ArithmeticNodeConstant(ConstantType c) : m_constant(c) {}
-	NodeType nodeType() { return CONSTANT; }
-	double value() { return (double)m_constant; }  //A constant must be compitable with 'double'.
-	inline const ConstantType constant() const { return m_constant; }
+    ArithmeticNodeConstant(ConstantType c) : m_constant(c) {}
+    NodeType nodeType() { return CONSTANT; }
+    double value() { return (double)m_constant; }  //A constant must be compitable with 'double'.
+    inline const ConstantType constant() const { return m_constant; }
     bool canReduce() { return true; }
 private:
-	ConstantType m_constant;
+    ConstantType m_constant;
 };
 
 template<int VariableType>
@@ -85,23 +85,23 @@ class ArithmeticNodeVariable : public ArithmeticNode
 {
 public:
     ArithmeticNodeVariable() : m_variable(0.0) { static_assert(VariableType == VARIABLE_X || VariableType == VARIABLE_Y, "Invalid Variable Type!"); };
-	int nodeType() { return VariableType; }
-	double value() { return m_variable; }
-	void setValue(NodeType type, double v)
+    int nodeType() { return VariableType; }
+    double value() { return m_variable; }
+    void setValue(NodeType type, double v)
     {
-		if (type == VariableType)
-			m_variable = v;
-	}
-
+        if (type == VariableType)
+            m_variable = v;
+    }
+    
     bool canReduce() { return false; }
 private:
-	double m_variable;
+    double m_variable;
 };
 
 class ArithmeticNodeOperatorInterface : public ArithmeticNode
 {
 public:
-
+    
     virtual ~ArithmeticNodeOperatorInterface()
     {
         for(auto* node : m_childNode)
@@ -110,24 +110,24 @@ public:
         }
         m_childNode.clear();
     }
-
+    
     void setValue(NodeType type, double v)
     {
         for(auto* node : m_childNode)
             node->setValue(type, v);
     }
     
-	NodeType nodeType() const { return OPERATOR; }
-
-	void removeChildNodes() { m_childNode.clear(); }
-	const std::list<ArithmeticNode*>* childNode() const { return &m_childNode; }
+    NodeType nodeType() const { return OPERATOR; }
+    
+    void removeChildNodes() { m_childNode.clear(); }
+    const std::list<ArithmeticNode*>* childNode() const { return &m_childNode; }
     std::list<ArithmeticNode*>* childNode() { return &m_childNode; }
-	void addChildNode(ArithmeticNode* node) { if(node != nullptr) m_childNode.push_back(node); }
-
+    void addChildNode(ArithmeticNode* node) { if(node != nullptr) m_childNode.push_back(node); }
+    
     bool canReduce() { for(auto* node : m_childNode) if(!node->canReduce()) return false; return true; }
     
 protected:
-	std::list<ArithmeticNode*> m_childNode;
+    std::list<ArithmeticNode*> m_childNode;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -135,14 +135,14 @@ protected:
 class ArithmeticNodeOperatorImp : public ArithmeticNodeOperatorInterface
 {
 public:
-
-	ArithmeticNodeOperatorImp(OperatorType op) : m_op(op) {}
-	
-	bool isValid();
-	double value();
-
+    
+    ArithmeticNodeOperatorImp(OperatorType op) : m_op(op) {}
+    
+    bool isValid();
+    double value();
+    
 private:
-	OperatorType m_op;
+    OperatorType m_op;
 };
 
 ArithmeticNode* parseEquation(const std::string& equation);

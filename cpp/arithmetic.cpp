@@ -7,10 +7,6 @@
  *        Blog: wysaid.org
  */
 
-#ifdef _MSC_VER
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-
 #include "arithmetic.h"
 #include <cmath>
 #include <vector>
@@ -136,6 +132,21 @@ ArithmeticNode::OperatorType getOpTypeByName(const char* name)
     }
     
     return type;
+}
+
+const char* getOpNameByType(ArithmeticNode::OperatorType opType)
+{
+	static_assert(sizeof(g_functions) / sizeof(*g_functions) == sizeof(g_opType) / sizeof(*g_opType), "Invalid Rule Strings!");
+
+	for(int i = 0; i != sizeof(g_opType) / sizeof(*g_opType); ++i)
+	{
+		if (opType == g_opType[i])
+		{
+			return g_functions[i];
+		}
+	}
+
+	return nullptr;
 }
 
 class Parser

@@ -10,6 +10,10 @@
 #ifndef _ARITHMETIC_H_
 #define _ARITHMETIC_H_
 
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <list>
 #include <string>
 
@@ -147,5 +151,8 @@ private:
 
 ArithmeticNode* parseEquation(const std::string& equation);
 void reduceNode(ArithmeticNode** pnode); //简化表达式, 保留变量。 对于不包含变量的表达式， 将直接变成一个 constant.
+
+ArithmeticNode::OperatorType getOpTypeByName(const char* name);
+const char* getOpNameByType(ArithmeticNode::OperatorType opType);
 
 #endif // !_ARITHMETIC_H_

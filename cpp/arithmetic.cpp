@@ -78,7 +78,7 @@ double ArithmeticNodeOperatorImp::value()
     }
 }
 
-const char* g_functions[] = {
+static const char* s_functions[] = {
     "exp",
     "abs",
     "sign",
@@ -99,7 +99,7 @@ const char* g_functions[] = {
     "log10",
 };
 
-ArithmeticNode::OperatorType g_opType[] =
+static ArithmeticNode::OperatorType s_opType[] =
 {
     ArithmeticNode::OP_EXP, //exp
     ArithmeticNode::OP_ABS, //abs
@@ -123,15 +123,15 @@ ArithmeticNode::OperatorType g_opType[] =
 
 ArithmeticNode::OperatorType getOpTypeByName(const char* name)
 {
-    static_assert(sizeof(g_functions) / sizeof(*g_functions) == sizeof(g_opType) / sizeof(*g_opType), "Invalid Rule Strings!");
+    static_assert(sizeof(s_functions) / sizeof(*s_functions) == sizeof(s_opType) / sizeof(*s_opType), "Invalid Rule Strings!");
     
     auto type = ArithmeticNode::OP_INVALID;
     
-    for(int i = 0; i != sizeof(g_functions) / sizeof(*g_functions); ++i)
+    for(int i = 0; i != sizeof(s_functions) / sizeof(*s_functions); ++i)
     {
-        if(strcmp(name, g_functions[i]) == 0)
+        if(strcmp(name, s_functions[i]) == 0)
         {
-            return g_opType[i];
+            return s_opType[i];
         }
     }
     

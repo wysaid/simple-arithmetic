@@ -336,7 +336,7 @@ protected:
                 return parse(mTmpEquations[index]);
             return nullptr;
         }
-        else if(isdigit(s[0]) || s[0] == '.')
+        else if(isdigit(s[0]) || s[0] == '.' || s[0] == '-')
         {
             double value;
             sscanf(s.c_str(), "%lf", &value);

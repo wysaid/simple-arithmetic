@@ -136,13 +136,13 @@ ArithmeticNode::OperatorType getOpTypeByName(const char* name)
 
 const char* getOpNameByType(ArithmeticNode::OperatorType opType)
 {
-	static_assert(sizeof(g_functions) / sizeof(*g_functions) == sizeof(g_opType) / sizeof(*g_opType), "Invalid Rule Strings!");
+	static_assert(sizeof(s_functions) / sizeof(*s_functions) == sizeof(s_opType) / sizeof(*s_opType), "Invalid Rule Strings!");
 
-	for(int i = 0; i != sizeof(g_opType) / sizeof(*g_opType); ++i)
+	for(int i = 0; i != sizeof(s_opType) / sizeof(*s_opType); ++i)
 	{
-		if (opType == g_opType[i])
+		if (opType == s_opType[i])
 		{
-			return g_functions[i];
+			return s_functions[i];
 		}
 	}
 

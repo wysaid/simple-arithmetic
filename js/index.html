@@ -73,7 +73,7 @@ function drawArithmeticCurve() {
 
 	for(var filter in filterRule) {
 		var pattern = "(/(?!Math\.)" + filterRule[filter] + "\(/gi)";
-		var rep = "Math." + filterRule[filter];
+		var rep = "Math." + filterRule[filter] + "(";
 		arithmeticRule = arithmeticRule.replace(eval(pattern), rep);
 	}
 

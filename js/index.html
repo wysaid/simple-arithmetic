@@ -72,7 +72,7 @@ function drawArithmeticCurve() {
 	var filterRule = ["abs", "acos", "asin", "acos", "PI", "tan", "atan", "atan2", "log", "log2", "log10", "pow", "sign", "sin", "cos", "sqrt", "exp", "E"];
 
 	for(var filter in filterRule) {
-		var pattern = "(/(?!Math\.)" + filterRule[filter] + "/gi)";
+		var pattern = "(/(?!Math\.)" + filterRule[filter] + "\(/gi)";
 		var rep = "Math." + filterRule[filter];
 		arithmeticRule = arithmeticRule.replace(eval(pattern), rep);
 	}

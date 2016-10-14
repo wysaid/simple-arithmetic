@@ -58,6 +58,7 @@ public:
     };
     
     virtual NodeType nodeType() const { return INVALID; }
+	virtual OperatorType operatorType() const { return OP_INVALID; }
     virtual double value() = 0;
     virtual bool isValid() { return true; }
     
@@ -144,6 +145,8 @@ public:
     
     bool isValid();
     double value();
+
+	OperatorType operatorType() const { return m_op; }
     
 private:
     OperatorType m_op;

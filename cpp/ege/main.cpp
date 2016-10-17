@@ -107,6 +107,7 @@ bool dealMsg(int msg, ArithmeticNode*& node)
 					dealMsg('y', node);
 					printf("Result: %s = %g\n", buffer, node->value());
 				}
+				return true;
 			}
 			else
 			{
@@ -135,6 +136,7 @@ bool dealMsg(int msg, ArithmeticNode*& node)
 					printf("%c = %g\n", msg, value);
 					node->setValue(isX ? ArithmeticNode::VARIABLE_X : ArithmeticNode::VARIABLE_Y, value);
 				}
+				return true;
 			}
 			else
 			{
@@ -148,13 +150,61 @@ bool dealMsg(int msg, ArithmeticNode*& node)
 		break;
 	}
 
-	return true;
+	return false;
+}
+
+void drawNodes(ArithmeticNode* node, int x, int y, PIMAGE pimg)
+{
+	switch (node->nodeType())
+	{
+	case ArithmeticNode::CONSTANT:
+		setcolor(WHITE);
+		settarget(pimg);
+		xyprintf(x, y, "%g", node->value());
+		settarget(nullptr);
+		break;
+	case ArithmeticNode::OPERATOR:
+	{
+		ArithmeticNode::OperatorType opType = node->operatorType();
+
+		if (opType <= ArithmeticNode::OP_POWER)
+		{
+			outtextxy(x, y, (char)opType, pimg);
+		}
+		else
+		{
+			const char* name = getOpNameByType(node->operatorType());
+			if (name == nullptr)
+				break;
+
+			setcolor(RED);
+			outtextxy(x, y, name, pimg);
+		}
+
+		auto* childNodes = node->childNode();
+		if (childNodes != nullptr)
+		{
+			for (auto* node : *childNodes)
+			{
+
+			}
+		}
+	}
+		break;
+	case ArithmeticNode::VARIABLE_X:case ArithmeticNode::VARIABLE_Y:
+		setcolor(GREEN);
+		outtextxy(x, y, node->nodeType() == ArithmeticNode::VARIABLE_X ? 'x' : 'y', pimg);
+		break;
+	default:
+		break;
+	}
 }
 
 int main()
 {
 	initgraph(SCR_WIDTH, SCR_HEIGHT, INIT_RENDERMANUAL);
 	ArithmeticNode* node = nullptr;
+	//PIMAGE pimg = newimage()
 	
 	for (; is_run(); delay_fps(60))
 	{
@@ -163,7 +213,10 @@ int main()
 		if (kbhit())
 		{
 			int ch = getch();
-			dealMsg(ch, node);
+			if(dealMsg(ch, node))
+			{
+
+			}
 
 			flushkey();
 		}

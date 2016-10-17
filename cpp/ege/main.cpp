@@ -1,4 +1,13 @@
-﻿#define SHOW_CONSOLE
+﻿/*
+* main.cpp
+*
+*  Created on: 2016-10-10
+*      Author: Wang Yang
+*        Mail: admin@wysaid.org
+*        Blog: wysaid.org
+*/
+
+#define SHOW_CONSOLE
 
 #include "../arithmetic.h"
 #include "graphics.h"

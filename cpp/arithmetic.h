@@ -77,7 +77,7 @@ class ArithmeticNodeConstant : public ArithmeticNode
 {
 public:
     ArithmeticNodeConstant(ConstantType c) : m_constant(c) {}
-    NodeType nodeType() { return CONSTANT; }
+    NodeType nodeType() const { return CONSTANT; }
     double value() { return (double)m_constant; }  //A constant must be compitable with 'double'.
     inline const ConstantType constant() const { return m_constant; }
     bool canReduce() { return true; }
@@ -90,7 +90,7 @@ class ArithmeticNodeVariable : public ArithmeticNode
 {
 public:
     ArithmeticNodeVariable() : m_variable(0.0) { static_assert(VariableType == VARIABLE_X || VariableType == VARIABLE_Y, "Invalid Variable Type!"); };
-    int nodeType() { return VariableType; }
+    int nodeType() const { return VariableType; }
     double value() { return m_variable; }
     void setValue(NodeType type, double v)
     {

@@ -307,7 +307,7 @@ int main()
 		{
 			cleardevice();
 			setcolor(0xffffff);
-			outtextxy(10, 20, "按下空格键输入表达式, 如: 1+1, 之后使用鼠标拖拽移动图形");
+			outtextxy(10, 20, "按下空格键输入表达式, 如: 1+1, 之后可使用鼠标拖拽移动图形");
 
 			if (node != nullptr)
 			{

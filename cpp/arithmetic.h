@@ -90,7 +90,7 @@ class ArithmeticNodeVariable : public ArithmeticNode
 {
 public:
     ArithmeticNodeVariable() : m_variable(0.0) { static_assert(VariableType == VARIABLE_X || VariableType == VARIABLE_Y, "Invalid Variable Type!"); };
-    int nodeType() const { return VariableType; }
+    NodeType nodeType() const { return (NodeType)VariableType; }
     double value() { return m_variable; }
     void setValue(NodeType type, double v)
     {

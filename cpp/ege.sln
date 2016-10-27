@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ege", "ege\ege.vcxproj", "{2B0ED67F-6F16-4F92-8FA5-B11AA06DA27A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "arithmetic", "ege\arithmetic.vcxproj", "{2B0ED67F-6F16-4F92-8FA5-B11AA06DA27A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

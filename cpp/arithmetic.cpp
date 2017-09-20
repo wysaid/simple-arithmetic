@@ -435,6 +435,11 @@ void ArithmeticExpression::parse(const string& equation)
     m_node = parser.parseNode(eq);
 }
 
+bool ArithmeticExpression::canReduce()
+{
+	return m_node != nullptr ? m_node->canReduce() : false;
+}
+
 void ArithmeticExpression::reduceNode()
 {
     reduceNode(&m_node);
@@ -481,12 +486,11 @@ void ArithmeticExpression::reduceNode(ArithmeticNode** pnode)
 
 double ArithmeticExpression::value()
 {
-    if(m_node != nullptr)
-        return m_node->value();
+	return m_node != nullptr ? m_node->value() :
 #if defined(_MSC_VER) && _MSC_VER < 1900 //Less than vs2015
-	return sqrtf(-1.0f);
+	sqrtf(-1.0f);
 #else
-    return NAN;
+    NAN;
 #endif
 }
 

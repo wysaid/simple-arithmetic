@@ -9,13 +9,13 @@
 
 #define SHOW_CONSOLE
 
-#include "../arithmetic.h"
 #include "graphics.h"
+#include "../arithmetic.h"
 
 #define SCR_WIDTH 800
 #define SCR_HEIGHT 600
 
-bool dealMsg(int msg, ArithmeticNode*& node)
+bool dealMsg(int msg, ArithmeticExpression*& expression)
 {
 	using namespace std;
 	const int BUFFER_SIZE = 1024;
@@ -32,20 +32,18 @@ bool dealMsg(int msg, ArithmeticNode*& node)
 		//Valid Input
 		if (ret != 0)
 		{
-			if (node != nullptr)
-				delete node;
-			node = parseEquation(buffer);
+			expression = new ArithmeticExpression(buffer);
 
-			if (node != nullptr && node->isValid())
+			if (expression->isValid())
 			{
-				if (node->canReduce())
-					printf("Result: %s = %g\n", buffer, node->value());
+				if (expression->canReduce())
+					printf("Result: %s = %g\n", buffer, expression->value());
 				else
 				{
 					puts("Variables are detected, please set them!");
-					dealMsg('x', node);
-					dealMsg('y', node);
-					printf("Result: %s = %g\n", buffer, node->value());
+					dealMsg('x', expression);
+					dealMsg('y', expression);
+					printf("Result: %s = %g\n", buffer, expression->value());
 				}
 				return true;
 			}
@@ -54,14 +52,14 @@ bool dealMsg(int msg, ArithmeticNode*& node)
 				string msg = "Invalid equation: ";
 				msg += buffer;
 				MessageBoxA(getHWnd(), msg.c_str(), "Invalid equation!", MB_OK);
-				delete node;
-				node = nullptr;
+				delete expression;
+				expression = nullptr;
 				return false;
 			}
 		}
 		break;
 	case 'x': case 'y':
-		if (node != nullptr)
+		if (expression != nullptr)
 		{
 			bool isX = msg == 'x';
 			string title = "Input value of ";
@@ -74,7 +72,8 @@ bool dealMsg(int msg, ArithmeticNode*& node)
 				if (sscanf(buffer, "%lf", &value) == 1 || sscanf(buffer, "%*[^0-9.-]%lf", &value) == 1)
 				{
 					printf("%c = %g\n", msg, value);
-					node->setValue(isX ? ArithmeticNode::VARIABLE_X : ArithmeticNode::VARIABLE_Y, value);
+					if(isX) expression->setX(value);
+					else expression->setY(value);
 				}
 				return true;
 			}
@@ -118,7 +117,7 @@ void drawNodes(ArithmeticNode* node, int x, int y, int depth)
 		}
 		else
 		{
-			const char* name = getOpNameByType(node->operatorType());
+			const char* name = ArithmeticNode::getOpNameByType(node->operatorType());
 			if (name == nullptr)
 				break;
 
@@ -181,7 +180,7 @@ int getDepth(ArithmeticNode* node, int depth = 0)
 int main()
 {
 	initgraph(SCR_WIDTH, SCR_HEIGHT, INIT_RENDERMANUAL);
-	ArithmeticNode* node = nullptr;
+	ArithmeticExpression* expression = nullptr;
 	setbkmode(TRANSPARENT);
 	setlinewidth(2);
 	bool shouldRedraw = true;
@@ -195,13 +194,13 @@ int main()
 		if (kbhit())
 		{
 			int ch = getch();
-			if(dealMsg(ch, node))
+			if(dealMsg(ch, expression))
 			{
 				x = SCR_WIDTH / 2;
 				y = SCR_HEIGHT / 2;
-				if (node != nullptr)
+				if (expression != nullptr && expression->isValid())
 				{
-					depth = getDepth(node);
+					depth = getDepth(expression->node());
 					shouldRedraw = true;
 				}
 			}
@@ -249,9 +248,9 @@ int main()
 			setcolor(0xffffff);
 			outtextxy(10, 20, "按下空格键输入表达式, 如: 1+1, 之后可使用鼠标拖拽移动图形");
 
-			if (node != nullptr)
+			if (expression != nullptr && expression->isValid())
 			{
-				drawNodes(node, x, y, depth - 2);
+				drawNodes(expression->node(), x, y, depth - 2);
 			}
 
 			shouldRedraw = false;

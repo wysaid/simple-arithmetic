@@ -24,7 +24,9 @@ if(expression)
 }
 ```
 
-### Demo
+### How to use
+
+Just add `arithmetic.cpp` & `arithmetic.h` to your project.
 
 ### ScreenShot
 

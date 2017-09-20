@@ -40,7 +40,5 @@ int main(int argc, char **argv)
         puts("Invalid Equation!");
     }
     
-    expression.reduceNode();
-    printf("Node after simplify: %g\n", expression.value());
     return 0;
 }

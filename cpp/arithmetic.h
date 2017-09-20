@@ -165,7 +165,7 @@ public:
     ~ArithmeticExpression();
     
     void parse(const std::string& equation);
-    void reduceNode(); //简化表达式, 保留变量。 对于不包含变量的表达式， 将直接简化为一个 constant.
+    void reduceNode(); //Optimize the nodes.  简化表达式, 保留变量。 对于不包含变量的表达式， 将直接简化为一个 constant.
     double value();
     inline operator bool() {return isValid(); }
     inline bool isValid() { return m_node != nullptr; }

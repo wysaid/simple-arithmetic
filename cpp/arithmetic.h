@@ -1,4 +1,4 @@
-﻿/*
+/*
  * arithmetic.h
  *
  *  Created on: 2016-9-10
@@ -70,6 +70,9 @@ public:
     virtual void addChildNode(ArithmeticNode* node) {}
     
     virtual bool canReduce() { return false; } //表达式是否能够简化, 不包含未知数的节点可以全部替换为 constant节点
+    
+    static ArithmeticNode::OperatorType getOpTypeByName(const char* name);
+    static const char* getOpNameByType(ArithmeticNode::OperatorType opType);
 };
 
 template <typename ConstantType>
@@ -90,15 +93,15 @@ class ArithmeticNodeVariable : public ArithmeticNode
 {
 public:
     ArithmeticNodeVariable() : m_variable(0.0) { static_assert(VariableType == VARIABLE_X || VariableType == VARIABLE_Y, "Invalid Variable Type!"); };
-    NodeType nodeType() const { return (NodeType)VariableType; }
-    double value() { return m_variable; }
-    void setValue(NodeType type, double v)
+    NodeType nodeType() const override { return (NodeType)VariableType; }
+    double value() override { return m_variable; }
+    void setValue(NodeType type, double v) override
     {
         if (type == VariableType)
             m_variable = v;
     }
     
-    bool canReduce() { return false; }
+    bool canReduce() override { return false; }
 private:
     double m_variable;
 };
@@ -152,10 +155,32 @@ private:
     OperatorType m_op;
 };
 
-ArithmeticNode* parseEquation(const std::string& equation);
-void reduceNode(ArithmeticNode** pnode); //简化表达式, 保留变量。 对于不包含变量的表达式， 将直接变成一个 constant.
+////////////////////////////////////////////////////////////////////////
 
-ArithmeticNode::OperatorType getOpTypeByName(const char* name);
-const char* getOpNameByType(ArithmeticNode::OperatorType opType);
+class ArithmeticExpression
+{
+public:
+    ArithmeticExpression() : m_node(nullptr) {}
+    explicit ArithmeticExpression(const std::string& equation);
+    ~ArithmeticExpression();
+    
+    void parse(const std::string& equation);
+    void reduceNode(); //简化表达式, 保留变量。 对于不包含变量的表达式， 将直接简化为一个 constant.
+    double value();
+    inline operator bool() {return isValid(); }
+    inline bool isValid() { return m_node != nullptr; }
+    inline ArithmeticNode* node() { return m_node; }
+    
+    //Set variables. (设置未知数)
+    void setX(double x);
+    void setY(double y);
+    
+protected:
+    void reduceNode(ArithmeticNode** pnode);
+    
+protected:
+    ArithmeticNode* m_node;
+};
+
 
 #endif // !_ARITHMETIC_H_

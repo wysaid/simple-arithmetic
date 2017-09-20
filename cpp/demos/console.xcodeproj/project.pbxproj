@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DB6DE3DF1D9003B5000D0F45 /* arithmetic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB6DE3DD1D9003B5000D0F45 /* arithmetic.cpp */; };
-		DB6DE3E11D9003BA000D0F45 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB6DE3E01D9003BA000D0F45 /* main.cpp */; };
+		3D80BCF41F7249B4002B832E /* arithmetic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D80BCF31F7249B4002B832E /* arithmetic.cpp */; };
+		3D80BCF61F7249D8002B832E /* consoleDemo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D80BCF51F7249D8002B832E /* consoleDemo.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,10 +24,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3D80BCF21F7249B4002B832E /* arithmetic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = arithmetic.h; path = ../arithmetic.h; sourceTree = "<group>"; };
+		3D80BCF31F7249B4002B832E /* arithmetic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = arithmetic.cpp; path = ../arithmetic.cpp; sourceTree = "<group>"; };
+		3D80BCF51F7249D8002B832E /* consoleDemo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = consoleDemo.cpp; sourceTree = "<group>"; };
 		DB6DE3C21D90013E000D0F45 /* arithmetic */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = arithmetic; sourceTree = BUILT_PRODUCTS_DIR; };
-		DB6DE3DD1D9003B5000D0F45 /* arithmetic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = arithmetic.cpp; sourceTree = SOURCE_ROOT; };
-		DB6DE3DE1D9003B5000D0F45 /* arithmetic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arithmetic.h; sourceTree = SOURCE_ROOT; };
-		DB6DE3E01D9003BA000D0F45 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = console/main.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,7 +44,9 @@
 		DB6DE3B91D90013E000D0F45 = {
 			isa = PBXGroup;
 			children = (
-				DB6DE3C41D90013E000D0F45 /* arithmetic */,
+				3D80BCF51F7249D8002B832E /* consoleDemo.cpp */,
+				3D80BCF31F7249B4002B832E /* arithmetic.cpp */,
+				3D80BCF21F7249B4002B832E /* arithmetic.h */,
 				DB6DE3C31D90013E000D0F45 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -55,16 +57,6 @@
 				DB6DE3C21D90013E000D0F45 /* arithmetic */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		DB6DE3C41D90013E000D0F45 /* arithmetic */ = {
-			isa = PBXGroup;
-			children = (
-				DB6DE3E01D9003BA000D0F45 /* main.cpp */,
-				DB6DE3DD1D9003B5000D0F45 /* arithmetic.cpp */,
-				DB6DE3DE1D9003B5000D0F45 /* arithmetic.h */,
-			);
-			path = arithmetic;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -93,7 +85,7 @@
 		DB6DE3BA1D90013E000D0F45 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = wangyang;
 				TargetAttributes = {
 					DB6DE3C11D90013E000D0F45 = {
@@ -125,8 +117,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB6DE3E11D9003BA000D0F45 /* main.cpp in Sources */,
-				DB6DE3DF1D9003B5000D0F45 /* arithmetic.cpp in Sources */,
+				3D80BCF41F7249B4002B832E /* arithmetic.cpp in Sources */,
+				3D80BCF61F7249D8002B832E /* consoleDemo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,7 +134,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -150,7 +144,12 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -189,7 +188,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -197,7 +198,12 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

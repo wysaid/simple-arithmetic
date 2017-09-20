@@ -1,4 +1,4 @@
-﻿/*
+/*
  * arithmetic.cpp
  *
  *  Created on: 2016-9-10
@@ -117,7 +117,7 @@ static ArithmeticNode::OperatorType s_opType[] =
     ArithmeticNode::OP_LOG10, //log10
 };
 
-ArithmeticNode::OperatorType getOpTypeByName(const char* name)
+ArithmeticNode::OperatorType ArithmeticNode::getOpTypeByName(const char* name)
 {
     static_assert(sizeof(s_functions) / sizeof(*s_functions) == sizeof(s_opType) / sizeof(*s_opType), "Invalid Rule Strings!");
     
@@ -134,7 +134,7 @@ ArithmeticNode::OperatorType getOpTypeByName(const char* name)
     return type;
 }
 
-const char* getOpNameByType(ArithmeticNode::OperatorType opType)
+const char* ArithmeticNode::getOpNameByType(ArithmeticNode::OperatorType opType)
 {
 	static_assert(sizeof(s_functions) / sizeof(*s_functions) == sizeof(s_opType) / sizeof(*s_opType), "Invalid Rule Strings!");
 
@@ -190,7 +190,7 @@ protected:
             auto endIndex = equation.find(')', startIndex + 1);
             if(endIndex == string::npos)
             {
-                puts("括号不匹配!");
+                puts("Parentheses do not match!");
                 equation = "";
                 break;
             }
@@ -200,7 +200,7 @@ protected:
             sprintf(mBuffer, "@%d", (int)mTmpEquations.size());
             mTmpEquations.push_back(eq);
             
-            //检查括号是否前置三角函数等
+            //Check if the left parenthesis is used by trigonometric function. (检查括号是否前置三角函数等)
             if(startIndex != 0 && isalpha(equation[startIndex - 1]))
             {
                 int opIndex = (int)startIndex - 2;
@@ -275,7 +275,7 @@ protected:
             
             if(before == opIndex - 1 || after == opIndex + 1)
             {
-                puts("错误的表达式!");
+                puts("Invalid Equation!");
                 equation = "";
                 break;
             }
@@ -322,7 +322,7 @@ protected:
         if(opIndex != string::npos)
         {
             string opName = s.substr(0, opIndex);
-            auto opType = getOpTypeByName(opName.c_str());
+            auto opType = ArithmeticNode::getOpTypeByName(opName.c_str());
             if(opType != ArithmeticNode::OP_INVALID)
             {
                 string opChild = s.substr(opIndex + 1, s.size() - opIndex - 2);
@@ -389,8 +389,19 @@ protected:
     string mOperators;
 };
 
+////////////////////////////////////////////////
 
-ArithmeticNode* parseEquation(const string& equation)
+ArithmeticExpression::ArithmeticExpression(const std::string &equation)
+{
+    parse(equation);
+}
+
+ArithmeticExpression::~ArithmeticExpression()
+{
+    delete m_node;
+}
+
+void ArithmeticExpression::parse(const string& equation)
 {
     string eq = equation;
     auto pos = eq.find('=');
@@ -417,10 +428,15 @@ ArithmeticNode* parseEquation(const string& equation)
     }
     
     Parser parser;
-    return parser.parseNode(eq);
+    m_node = parser.parseNode(eq);
 }
 
-void reduceNode(ArithmeticNode** pnode)
+void ArithmeticExpression::reduceNode()
+{
+    reduceNode(&m_node);
+}
+
+void ArithmeticExpression::reduceNode(ArithmeticNode** pnode)
 {
     ArithmeticNode* node = *pnode;
     
@@ -457,6 +473,25 @@ void reduceNode(ArithmeticNode** pnode)
             }
         }
     }
+}
+
+double ArithmeticExpression::value()
+{
+    if(m_node != nullptr)
+        return m_node->value();
+    return NAN;
+}
+
+void ArithmeticExpression::setX(double x)
+{
+    if(m_node != nullptr)
+        m_node->setValue(ArithmeticNode::VARIABLE_X, x);
+}
+
+void ArithmeticExpression::setY(double y)
+{
+    if(m_node != nullptr)
+        m_node->setValue(ArithmeticNode::VARIABLE_Y, y);
 }
 
 

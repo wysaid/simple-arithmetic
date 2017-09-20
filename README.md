@@ -30,7 +30,7 @@ Just add `arithmetic.cpp` & `arithmetic.h` to your project.
 
 ### ScreenShot
 
-[![Tool](https://raw.githubusercontent.com/wysaid/simple-arithmetic/gh-pages/screenshot/screenshot2.png "wysaid")](http://arithmetic.wysaid.org)
+![Tool](https://raw.githubusercontent.com/wysaid/simple-arithmetic/gh-pages/screenshot/screenshot2.png "wysaid")
 
 ## javascript version
 

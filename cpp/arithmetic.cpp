@@ -1,4 +1,4 @@
-/*
+﻿/*
  * arithmetic.cpp
  *
  *  Created on: 2016-9-10
@@ -67,7 +67,11 @@ double ArithmeticNodeOperatorImp::value()
         case OP_TAN: return tan(LEFT_VAR);
         case OP_ARCTAN: return atan(LEFT_VAR);
         case OP_LOG: return log(LEFT_VAR);
-        case OP_LOG2: return log2(LEFT_VAR);
+#if defined(_MSC_VER) && _MSC_VER < 1900 //Less than vs2015
+        case OP_LOG2: return log(LEFT_VAR) / log(2);
+#else
+	    case OP_LOG2: return log2(LEFT_VAR);
+#endif
         case OP_LOG10: return log10(LEFT_VAR);
         default:
             return 0.0;
@@ -420,7 +424,7 @@ void ArithmeticExpression::parse(const string& equation)
         if(*it == '[' || *it == '{') *it = '(';
         else if(*it == ']' || *it == '}') *it = ')';
         
-        if (isblank(*it))
+		if (!isgraph(*it))
         {
             it = eq.erase(it);
         }
@@ -479,7 +483,11 @@ double ArithmeticExpression::value()
 {
     if(m_node != nullptr)
         return m_node->value();
+#if defined(_MSC_VER) && _MSC_VER < 1900 //Less than vs2015
+	return sqrtf(-1.0f);
+#else
     return NAN;
+#endif
 }
 
 void ArithmeticExpression::setX(double x)

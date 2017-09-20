@@ -18,7 +18,7 @@
     <ClCompile Include="..\arithmetic.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="consoleDemo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

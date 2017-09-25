@@ -207,7 +207,7 @@ protected:
             
             string eq = equation.substr(startIndex + 1, endIndex - startIndex - 1);
             eq = extractOP(eq);
-            sprintf(mBuffer, "@%d ", (int)mTmpEquations.size());
+            sprintf(mBuffer, "@%d", (int)mTmpEquations.size());
             mTmpEquations.push_back(eq);
             
             //Check if the left parenthesis is used by trigonometric function. (检查括号是否前置三角函数等)
@@ -218,9 +218,9 @@ protected:
                 if(opIndex < 0 || !isalpha(equation[opIndex])) ++opIndex;
                 
                 eq = equation.substr(opIndex, startIndex - opIndex);
-                sprintf(mBuffer, "%s(@%d )", eq.c_str(), (int)mTmpEquations.size() - 1);
+                sprintf(mBuffer, "%s(@%d)", eq.c_str(), (int)mTmpEquations.size() - 1);
                 mTmpEquations.push_back(mBuffer);
-                sprintf(mBuffer, "@%d ", (int)mTmpEquations.size() - 1);
+                sprintf(mBuffer, "@%d", (int)mTmpEquations.size() - 1);
                 
                 equation = equation.substr(0, opIndex) + mBuffer + equation.substr(endIndex + 1, equation.size() - endIndex - 1);
             }

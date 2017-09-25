@@ -198,7 +198,7 @@ protected:
                 equation = "";
                 break;
             }
-            else if(endIndex != equation.size() && mOperators.find_first_of(equation[endIndex + 1]) == string::npos)
+            else if(endIndex + 1 < equation.size() && mOperators.find_first_of(equation[endIndex + 1]) == string::npos)
             {
                 puts("Invalid operator. Note: (1+1)2 is invalid. Please write: (1+1)*2");
                 equation = "";

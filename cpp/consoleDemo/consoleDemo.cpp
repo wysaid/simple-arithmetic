@@ -1,4 +1,4 @@
-﻿/*
+/*
  * main.cpp
  *
  *  Created on: 2016-9-10
@@ -27,17 +27,28 @@ int main(int argc, char **argv)
     
     ArithmeticExpression expression(s);
     
-    if(expression)
+    while(1)
     {
-        double x = 55, y = 88;
-        expression.setX(x);
-        expression.setY(y);
-//        printf("\nx=%g\ny=%g\n%s = %g\n", x, y, s.c_str(), node->value());
-        printf("%s = %g\n", s.c_str(), expression.value());
-    }
-    else
-    {
-        puts("Invalid Equation!");
+        if(expression)
+        {
+            double x = 55, y = 88;
+            expression.setX(x);
+            expression.setY(y);
+//          printf("\nx=%g\ny=%g\n%s = %g\n", x, y, s.c_str(), node->value());
+            printf("%s = %g\n", s.c_str(), expression.value());
+        }
+        else
+        {
+            puts("Invalid Equation!");
+        }
+        
+        if(argc != 1)
+            break;
+        
+        puts("Input some equation: ");
+        if(cin >> s)
+            expression.parse(s);
+        else break;
     }
     
     return 0;

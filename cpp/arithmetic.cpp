@@ -441,6 +441,8 @@ void ArithmeticExpression::parse(const string& equation)
         else ++it;
     }
     
+    if(m_node != nullptr)
+        delete m_node;
     Parser parser;
     m_node = parser.parseNode(eq);
 }

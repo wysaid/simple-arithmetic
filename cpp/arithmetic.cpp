@@ -1,4 +1,4 @@
-﻿/*
+/*
  * arithmetic.cpp
  *
  *  Created on: 2016-9-10
@@ -198,10 +198,16 @@ protected:
                 equation = "";
                 break;
             }
+            else if(endIndex != equation.size() && mOperators.find_first_of(equation[endIndex + 1]) == string::npos)
+            {
+                puts("Invalid operator. Note: (1+1)2 is invalid. Please write: (1+1)*2");
+                equation = "";
+                break;
+            }
             
             string eq = equation.substr(startIndex + 1, endIndex - startIndex - 1);
             eq = extractOP(eq);
-            sprintf(mBuffer, "@%d", (int)mTmpEquations.size());
+            sprintf(mBuffer, "@%d ", (int)mTmpEquations.size());
             mTmpEquations.push_back(eq);
             
             //Check if the left parenthesis is used by trigonometric function. (检查括号是否前置三角函数等)
@@ -212,9 +218,9 @@ protected:
                 if(opIndex < 0 || !isalpha(equation[opIndex])) ++opIndex;
                 
                 eq = equation.substr(opIndex, startIndex - opIndex);
-                sprintf(mBuffer, "%s(@%d)", eq.c_str(), (int)mTmpEquations.size() - 1);
+                sprintf(mBuffer, "%s(@%d )", eq.c_str(), (int)mTmpEquations.size() - 1);
                 mTmpEquations.push_back(mBuffer);
-                sprintf(mBuffer, "@%d", (int)mTmpEquations.size() - 1);
+                sprintf(mBuffer, "@%d ", (int)mTmpEquations.size() - 1);
                 
                 equation = equation.substr(0, opIndex) + mBuffer + equation.substr(endIndex + 1, equation.size() - endIndex - 1);
             }
@@ -372,7 +378,8 @@ protected:
             return nullptr; //Invalid case.
         
         char op, left[128], right[128];
-        if(sscanf(equation.c_str(), "%127[^+-*/^]%c%127s", left, &op, right) == 3)
+        int ret = sscanf(equation.c_str(), "%127[^+-*/^]%c%127s", left, &op, right);
+        if(ret == 3)
         {
             ArithmeticNode *leftNode, *rightNode;
             leftNode = parseSimpleNode(left);
@@ -381,6 +388,11 @@ protected:
             opNode->addChildNode(leftNode);
             opNode->addChildNode(rightNode);
             return opNode;
+        }
+        else if(ret == 2)
+        {
+            printf("Invalid node: %s\n", equation.c_str());
+            return nullptr;
         }
         
         return parseSimpleNode(equation);
@@ -425,9 +437,7 @@ void ArithmeticExpression::parse(const string& equation)
         else if(*it == ']' || *it == '}') *it = ')';
         
 		if (!isgraph(*it))
-        {
             it = eq.erase(it);
-        }
         else ++it;
     }
     

@@ -407,7 +407,7 @@ protected:
 
 ////////////////////////////////////////////////
 
-ArithmeticExpression::ArithmeticExpression(const std::string &equation)
+ArithmeticExpression::ArithmeticExpression(const std::string &equation) : m_node(nullptr)
 {
     parse(equation);
 }

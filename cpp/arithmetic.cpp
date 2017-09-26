@@ -357,10 +357,10 @@ protected:
                 return parse(mTmpEquations[index]);
             return nullptr;
         }
-        else if(isdigit(s[0]) || s[0] == '.' || s[0] == '-')
+        
+        double value;
+        if(sscanf(s.c_str(), "%lf", &value) == 1)
         {
-            double value;
-            sscanf(s.c_str(), "%lf", &value);
             node = new ArithmeticNodeConstant<double>(value);
         }
         else

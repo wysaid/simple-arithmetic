@@ -37,10 +37,16 @@ bool ArithmeticNodeOperatorImp::isValid()
         case OP_MULTIPLY:
         case OP_DIVID:
         case OP_POWER:
-            return m_childNode.size() >= 2;
+            if(m_childNode.size() == 2)
+                return m_childNode.front()->isValid() && m_childNode.back()->isValid();
+            break;
         default:
-            return m_childNode.size() >= 1;
+            if(m_childNode.size() >= 1)
+                return m_childNode.front()->isValid();
+            break;
     }
+    
+    return false;
 }
 
 double ArithmeticNodeOperatorImp::value()

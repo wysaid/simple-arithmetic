@@ -41,7 +41,7 @@ bool ArithmeticNodeOperatorImp::isValid()
                 return m_childNode.front()->isValid() && m_childNode.back()->isValid();
             break;
         default:
-            if(m_childNode.size() >= 1)
+            if(m_childNode.size() == 1)
                 return m_childNode.front()->isValid();
             break;
     }

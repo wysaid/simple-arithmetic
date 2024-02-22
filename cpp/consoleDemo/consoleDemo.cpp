@@ -8,13 +8,14 @@
  */
 
 #include "../arithmetic.h"
+
 #include <iostream>
 using namespace std;
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-    string s;// = "(1+1+1+1) ^ tan(((2+2)+(3-2)) * 0.5) + 5*(6-2*4) + cos(x^2) + sin(y)^2";
-    
+    string s; // = "(1+1+1+1) ^ tan(((2+2)+(3-2)) * 0.5) + 5*(6-2*4) + cos(x^2) + sin(y)^2";
+
     if (argc == 1)
     {
         puts("Input your equation:");
@@ -24,32 +25,43 @@ int main(int argc, char **argv)
     {
         s = argv[1];
     }
-    
+
     ArithmeticExpression expression(s);
-    
-    while(1)
+
+    while (1)
     {
-        if(expression)
+        if (expression)
         {
-            double x = 55, y = 88;
+            double x, y;
+            printf("Input X:");
+            cin >> x;
+            printf("Input Y:");
+            cin >> y;
+
+            if (cin.bad() || cin.fail())
+            {
+                puts("Invalid input!");
+                break;
+            }
+
             expression.setX(x);
             expression.setY(y);
-//          printf("\nx=%g\ny=%g\n%s = %g\n", x, y, s.c_str(), node->value());
             printf("%s = %g\n", s.c_str(), expression.value());
         }
         else
         {
             puts("Invalid Equation!");
         }
-        
-        if(argc != 1)
+
+        if (argc != 1)
             break;
-        
+
         puts("Input some equation: ");
-        if(cin >> s)
+        if (cin >> s)
             expression.parse(s);
-        else break;
+        else
+            break;
     }
-    
+
     return 0;
 }

@@ -28,6 +28,8 @@
 
 #define BUFFER_SIZE 1024
 
+constexpr std::string_view arithmeticOperators = "+-*/^";
+
 using namespace std;
 
 bool ArithmeticNodeOperatorImp::isValid()
@@ -182,8 +184,7 @@ const char* ArithmeticNode::getOpNameByType(ArithmeticNode::OperatorType opType)
 class Parser
 {
 public:
-    Parser() :
-        mOperators("+-*/^") {}
+    Parser() = default;
 
     ArithmeticNode* parseNode(const string& equation)
     {
@@ -223,7 +224,7 @@ protected:
                 equation = "";
                 break;
             }
-            else if (endIndex + 1 < equation.size() && mOperators.find_first_of(equation[endIndex + 1]) == string::npos && equation[endIndex + 1] != ')')
+            else if (endIndex + 1 < equation.size() && arithmeticOperators.find_first_of(equation[endIndex + 1]) == string::npos && equation[endIndex + 1] != ')')
             {
                 puts("Invalid operator. Note: (1+1)2 is invalid. Please write: (1+1)*2");
                 equation = "";
@@ -286,7 +287,7 @@ protected:
                     opIndex = i;
                 }
 
-                if (mOperators.find_first_of(equation[i]) != string::npos)
+                if (arithmeticOperators.find_first_of(equation[i]) != string::npos)
                     ++opCount;
             }
 
@@ -403,22 +404,31 @@ protected:
         if (equation.empty())
             return nullptr; // Invalid case.
 
-        char op, left[128], right[128];
-        int ret = sscanf(equation.c_str(), "%127[^+-*/^]%c%127s", left, &op, right);
-        if (ret == 3)
+        char op;
+        std::string left, right;
+        auto index = equation.find_first_of(arithmeticOperators.data());
+        if (index != string::npos)
         {
-            ArithmeticNode *leftNode, *rightNode;
-            leftNode = parseSimpleNode(left);
-            rightNode = parseSimpleNode(right);
-            ArithmeticNodeOperatorImp* opNode = new ArithmeticNodeOperatorImp((ArithmeticNodeOperatorImp::OperatorType)op);
-            opNode->addChildNode(leftNode);
-            opNode->addChildNode(rightNode);
-            return opNode;
-        }
-        else if (ret == 2)
-        {
-            printf("Invalid node: %s\n", equation.c_str());
-            return nullptr;
+            op = equation[index];
+            left = equation.substr(0, index);
+            if (index + 1 < equation.size())
+                right = equation.substr(index + 1);
+
+            if (left.empty() || right.empty())
+            {
+                printf("Invalid node: %s\n", equation.c_str());
+                return nullptr;
+            }
+            else
+            {
+                ArithmeticNode *leftNode, *rightNode;
+                leftNode = parseSimpleNode(left);
+                rightNode = parseSimpleNode(right);
+                ArithmeticNodeOperatorImp* opNode = new ArithmeticNodeOperatorImp((ArithmeticNodeOperatorImp::OperatorType)op);
+                opNode->addChildNode(leftNode);
+                opNode->addChildNode(rightNode);
+                return opNode;
+            }
         }
 
         return parseSimpleNode(equation);
@@ -428,7 +438,6 @@ protected:
     char mBuffer[BUFFER_SIZE]; // for temp usage.
 
     vector<string> mTmpEquations;
-    string mOperators;
 };
 
 ////////////////////////////////////////////////

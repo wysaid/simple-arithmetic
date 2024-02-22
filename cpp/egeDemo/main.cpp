@@ -11,6 +11,7 @@
 
 #include "graphics.h"
 #include "../arithmetic.h"
+#include <cmath>
 
 #define SCR_WIDTH 800
 #define SCR_HEIGHT 600
